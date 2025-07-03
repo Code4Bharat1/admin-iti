@@ -1,11 +1,11 @@
 
-import Dashboard from '@/components/admindashboard/dashboard'
+import TopperList from '@/components/admintopper/topper'
 import React from 'react'
 
 export default function page() {
   return (
     <div>
-        <Dashboard/>
+        <TopperList/>
     
         </div>
   )

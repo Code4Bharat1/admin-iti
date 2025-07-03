@@ -1,11 +1,11 @@
 
-import Dashboard from '@/components/admindashboard/dashboard'
+import VideoGallery from '@/components/adminvideo/video'
 import React from 'react'
 
 export default function page() {
   return (
     <div>
-        <Dashboard/>
+        <VideoGallery/>
     
         </div>
   )
