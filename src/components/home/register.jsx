@@ -4,7 +4,7 @@ import { MdEmail } from 'react-icons/md';
 import { BsTelephone } from 'react-icons/bs';
 import toast, { Toaster } from 'react-hot-toast';
 
-export default function Home() {
+export default function Register() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
