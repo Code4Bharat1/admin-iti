@@ -1,14 +1,38 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export default function NoticeNewsSection() {
+  const [notices, setNotices] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await axios.get('http://localhost:5000/api/admin/notices', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setNotices(res.data);
+      } catch (err) {
+        console.error('Failed to fetch notices:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotices();
+  }, []);
+
   return (
     <div className="flex flex-col md:flex-row border border-blue-200 rounded-md overflow-hidden">
       {/* Left Side: Notice Board */}
       <div className="bg-[#1a264f] text-[#FFD700] w-full md:w-4/5 p-6">
         <div className="flex justify-center items-center mb-4">
-          <div className="notice-arrow bg-[#FFD700] text-black text-xl font-bold p-8  py-3 w-fit">
+          <div className="notice-arrow bg-[#FFD700] text-black text-xl font-bold p-8 py-3 w-fit">
             NOTICE BOARD
           </div>
         </div>
@@ -20,18 +44,18 @@ export default function NoticeNewsSection() {
         `}</style>
 
         <div className="space-y-8 mx-10 mt-10 mb-10 text-sm md:text-2xl">
-          <div className="flex gap-3">
-            <span className="text-2xl">•</span>
-            <span>Admission For 2024–2025 are open</span>
-          </div>
-          <div className="flex gap-3 text-[#ffcc00] font-medium">
-            <span className="text-2xl">•</span>
-            <span>Scholarship Application Now Open – Apply Before 30th June</span>
-          </div>
-          <div className="flex gap-3">
-            <span className="text-2xl">•</span>
-            <span>Fee Payment Deadline – 20th June 2025</span>
-          </div>
+          {loading ? (
+            <p>Loading notices...</p>
+          ) : notices.length === 0 ? (
+            <p>No notices found.</p>
+          ) : (
+            notices.map((notice, idx) => (
+              <div key={idx} className="flex gap-3">
+                <span className="text-2xl">•</span>
+                <span>{notice.description}</span>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
@@ -46,9 +70,7 @@ export default function NoticeNewsSection() {
           </div>
           <div className="flex gap-3">
             <span className="text-xl">•</span>
-            <span>
-              New Blog Published: “Top 5 Skills Every Student Should Learn in 2025”
-            </span>
+            <span>New Blog Published: “Top 5 Skills Every Student Should Learn in 2025”</span>
           </div>
           <div className="flex gap-3">
             <span className="text-xl">•</span>
