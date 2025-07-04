@@ -1,6 +1,6 @@
 
-import MarineFilter from '@/components/coursess/marinefilter'
-import OurTrade from '@/components/coursess/our_trade'
+import MarineFilter from '@/componentss/coursess/marinefilter'
+import OurTrade from '@/componentss/coursess/our_trade'
 import React from 'react'
 
 export default function page() {

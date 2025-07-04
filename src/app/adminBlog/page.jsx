@@ -1,6 +1,6 @@
 
 
-import BlogPage from '@/component/adminBlog/adminblog'
+import BlogPage from '@/components/adminBlog/adminblog'
 import React from 'react'
 
 export default function page() {

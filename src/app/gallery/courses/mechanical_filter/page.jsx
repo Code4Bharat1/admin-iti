@@ -1,5 +1,5 @@
-import MechanicalFitterSection from '@/components/coursess/mechanical'
-import OurTrade from '@/components/coursess/our_trade'
+import MechanicalFitterSection from '@/componentss/coursess/mechanical'
+import OurTrade from '@/componentss/coursess/our_trade'
 
 
 import React from 'react'

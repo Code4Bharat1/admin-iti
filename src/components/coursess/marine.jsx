@@ -58,7 +58,7 @@ export default function MarineElectricianSection() {
             style={{ fontFamily: "Times New Roman, serif" }}
           >
             <li>Understand marine electrical circuits, safety standards, and the functioning of shipboard electrical systems.</li>
-            <li>Learn to install and connect electrical component such as motors, generators, switchboards, and lighting systems on ships.</li>
+            <li>Learn to install and connect electrical components such as motors, generators, switchboards, and lighting systems on ships.</li>
             <li>Study the operation of AC/DC power systems, battery banks, control panels, and energy distribution on marine vessels.</li>
             <li>Learn to read and interpret marine electrical schematics and wiring diagrams used in shipbuilding and repair.</li>
             <li>Practice safety protocols for working on ships, including fire detection systems, emergency lighting, and safety alarms.</li>

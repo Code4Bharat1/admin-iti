@@ -1,7 +1,9 @@
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import axios from 'axios';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -15,61 +17,75 @@ import {
   FaMedal,
   FaSignOutAlt,
 } from "react-icons/fa";
+ // adjust this path to your api.js
 
 export default function TopperListWithSidebar() {
-  const [students, setStudents] = useState([
-    {
-      id: 1,
-      name: "Hassan Salim Shaikh",
-      trade: "Computer Operator and Programming Assistant (COPA)",
-      percentage: "91.16%",
-    },
-    {
-      id: 2,
-      name: "Varad Jagdish Gurav",
-      trade: "Draughtman (Civil)",
-      percentage: "85.33%",
-    },
-    {
-      id: 3,
-      name: "Mufeez Moin Shaban",
-      trade: "Draughtman (Mechanical)",
-      percentage: "72.83%",
-    },
-    {
-      id: 4,
-      name: "Saurabh Tana ji Talape",
-      trade: "Marine Fitter",
-      percentage: "91.00%",
-    },
-    {
-      id: 5,
-      name: "Surve Devendra Jitendra",
-      trade: "Refrigeration and Air Conditioning Technician",
-      percentage: "87.16%",
-    },
-  ]);
-
+  const [students, setStudents] = useState([]);
   const [selectedYear, setSelectedYear] = useState(new Date());
   const router = useRouter();
 
-  const handleDelete = (id) => {
-    setStudents((prev) => prev.filter((s) => s.id !== id));
-  };
+  // ✅ Fetch students on mount
+  useEffect(() => {
+    const fetchToppers = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/admin/toppers/getTopper");
+        setStudents(res.data); // adjust if your API wraps data differently
+      } catch (err) {
+        console.error("Error fetching toppers:", err);
+      }
+    };
 
-  const handleEdit = (id) => {
-    alert("Edit clicked for ID: " + id);
-  };
+    fetchToppers();
+  }, []);
 
-  const handleAddStudent = () => {
-    const newId = students.length > 0 ? students[students.length - 1].id + 1 : 1;
+  // ✅ Add new student to backend
+  const handleAddStudent = async () => {
     const newStudent = {
-      id: newId,
       name: "New Student",
       trade: "New Trade",
       percentage: "0%",
     };
-    setStudents((prev) => [...prev, newStudent]);
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/admin/toppers/addTopper", newStudent);
+      setStudents((prev) => [...prev, res.data]); // adjust if response wraps data
+    } catch (err) {
+      console.error("Error adding student:", err);
+    }
+  };
+
+  // ✅ Delete student from backend
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/admin/toppers/deleteTopper/${id}`);
+      setStudents((prev) => prev.filter((s) => s.id !== id));
+    } catch (err) {
+      console.error("Error deleting student:", err);
+    }
+  };
+
+  // ✅ Update student in backend
+  const handleEdit = async (id) => {
+    const updatedName = prompt("Enter new name:");
+    const updatedTrade = prompt("Enter new trade:");
+    const updatedPercentage = prompt("Enter new percentage:");
+
+    if (!updatedName || !updatedTrade || !updatedPercentage) return;
+
+    const updatedStudent = {
+      name: updatedName,
+      trade: updatedTrade,
+      percentage: updatedPercentage,
+    };
+
+    try {
+      const res = await axios.put(`http://localhost:5000/api/admin/toppers/updateTopper/${id}`, updatedStudent);
+      setStudents((prev) =>
+        prev.map((s) => (s.id === id ? res.data : s))
+      );
+    } catch (err) {
+      console.error("Error updating student:", err);
+    }
   };
 
   return (
@@ -149,7 +165,7 @@ export default function TopperListWithSidebar() {
           </button>
         </div>
 
-        {/* Table Container with Height and Scroll */}
+        {/* Table Container */}
         <div className="overflow-x-auto max-h-[600px] overflow-y-auto border border-gray-300 rounded-lg">
           <table className="min-w-full text-base">
             <thead className="sticky top-0 bg-[#1B264F] text-white text-left">
@@ -160,32 +176,35 @@ export default function TopperListWithSidebar() {
                 <th className="px-6 py-4 font-semibold">Action</th>
               </tr>
             </thead>
-            <tbody className="bg-white text-gray-800">
-              {students.map((student) => (
-                <tr key={student.id} className="border-b border-gray-200">
-                  <td className="px-6 py-4">{student.name}</td>
-                  <td className="px-6 py-4">{student.trade}</td>
-                  <td className="px-6 py-4">{student.percentage}</td>
-                  <td className="px-6 py-4 space-x-4">
-                    <button
-                      onClick={() => handleEdit(student.id)}
-                      className="text-green-600 hover:underline"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(student.id)}
-                      className="text-red-600 hover:underline"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+           <tbody className="bg-white text-gray-800">
+  {students.map((student) => (
+    <tr key={student._id} className="border-b border-gray-200">
+      <td className="px-6 py-4">{student.studentName}</td>
+      <td className="px-6 py-4">{student.trade}</td>
+      <td className="px-6 py-4">{student.percentage}</td>
+      <td className="px-6 py-4 space-x-4">
+        <button
+          onClick={() => handleEdit(student._id)}
+          className="text-green-600 hover:underline"
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => handleDelete(student._id)}
+          className="text-red-600 hover:underline"
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
           </table>
         </div>
       </div>
     </div>
   );
 }
+
+

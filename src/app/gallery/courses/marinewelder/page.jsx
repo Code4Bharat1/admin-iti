@@ -1,5 +1,5 @@
-import MarineWelder from '@/components/coursess/mechanicalweldar'
-import OurTrade from '@/components/coursess/our_trade'
+import MarineWelder from '@/componentss/coursess/mechanicalweldar'
+import OurTrade from '@/componentss/coursess/our_trade'
 import React from 'react'
 
 export default function page() {

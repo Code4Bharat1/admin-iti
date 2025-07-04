@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import {
   FaUserCircle,
@@ -15,31 +16,25 @@ import {
   FaTrashAlt,
 } from 'react-icons/fa';
 
+import { useEffect } from 'react';
+
 export default function Gallery() {
   const router = useRouter();
-
-  const [photos, setPhotos] = useState([
-    '/images/pho1.png',
-    '/images/pho2.png',
-    '/images/pho3.png',
-    '/images/pho4.png',
-    '/images/pho5.png',
-    '/images/pho6.png',
-    '/images/pho7.png',
-    '/images/pho8.png',
-    '/images/pho9.png',
-    '/images/pho10.png',
-    '/images/pho11.png',
-    '/images/pho12.png',
-    '/images/pho13.png',
-    '/images/pho14.png',
-    '/images/pho15.png',
-    '/images/pho16.png',
-    '/images/pho17.png',
-    '/images/pho18.png',
-  ]);
-
+  const [photos, setPhotos] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
+  useEffect(() => {
+  const fetchPhotos = async () => {
+    try {
+      const res = await axios.post('http://localhost:5000/api/admin/media/images');  // Make sure this matches your backend route
+      const data = await res.json();
+      setPhotos(data); // your API should return an array of image objects
+    } catch (err) {
+      console.error('Failed to fetch photos', err);
+    }
+  };
+
+  fetchPhotos();
+}, []);
 
   const handleDelete = (index) => {
     const updatedPhotos = [...photos];
@@ -51,14 +46,31 @@ export default function Gallery() {
     setSelectedFile(e.target.files[0]);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (selectedFile) {
-      const newPhotoUrl = URL.createObjectURL(selectedFile);
-      setPhotos([...photos, newPhotoUrl]);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (selectedFile) {
+    try {
+      const formData = new FormData();
+      formData.append('image', selectedFile);
+
+      const res = await axios.post(
+        'http://localhost:5000/api/admin/media/images',
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
+
+      const newImage = res.data;
+      setPhotos([...photos, newImage]);
       setSelectedFile(null);
+
+    } catch (err) {
+      console.error('Error uploading image:', err);
     }
-  };
+  }
+};
+
 
   const handleClear = () => {
     setSelectedFile(null);
