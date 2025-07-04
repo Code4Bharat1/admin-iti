@@ -15,7 +15,8 @@ import {
 
 export default function NoticeBoard() {
   const router = useRouter();
-  const [notice, setNotice] = useState("");
+
+  const [notice, setNotice] = useState("Enter your notice here");
   const [activities, setActivities] = useState([
     {
       id: 1,
@@ -37,6 +38,8 @@ export default function NoticeBoard() {
     },
   ]);
 
+  const [editingActivity, setEditingActivity] = useState(null);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!notice.trim()) return;
@@ -51,11 +54,21 @@ export default function NoticeBoard() {
       }),
     };
     setActivities([newActivity, ...activities]);
-    setNotice("");
+    setNotice("Enter your notice here");
   };
 
   const handleEdit = (id) => {
-    alert("Edit notice with ID: " + id);
+    const activityToEdit = activities.find((a) => a.id === id);
+    setEditingActivity({ ...activityToEdit });
+  };
+
+  const handleSaveEdit = () => {
+    setActivities((prev) =>
+      prev.map((item) =>
+        item.id === editingActivity.id ? editingActivity : item
+      )
+    );
+    setEditingActivity(null);
   };
 
   const handleDelete = (id) => {
@@ -125,31 +138,31 @@ export default function NoticeBoard() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 bg-[#EDF4FF] p-10">
+      <div className="flex-1 bg-[#EDF4FF] p-10 relative">
         <h1 className="text-3xl font-bold text-[#1F2A44] mb-6">Notice board</h1>
 
-       {/* Add New Notice */}
-<form onSubmit={handleSubmit} className="mb-10">
-  <label className="block font-medium text-lg text-gray-800 mb-2">
-    Add New Notice
-  </label>
-  <textarea
-    value={notice}
-    onChange={(e) => setNotice(e.target.value)}
-    placeholder="Enter your notice here"
-    rows={3}
-    className="w-full max-w-4xl border-b-2 border-gray-300 focus:border-blue-500 outline-none px-1 py-1 text-gray-800 placeholder-gray-500 mb-4"
-  ></textarea>
-  <div>
-    <button
-      type="submit"
-      className="bg-[#1B264F] text-white px-6 py-2 rounded font-semibold tracking-wide"
-    >
-      SUBMIT
-    </button>
-  </div>
-</form>
-
+        {/* Add New Notice */}
+        <div className="p-6 rounded-lg max-w-5xl mb-10">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <label className="block font-bold text-lg text-[#1F2C56]">
+              Add New Notice
+            </label>
+            <textarea
+              value={notice}
+              onChange={(e) => setNotice(e.target.value)}
+              rows={4}
+              className="w-full p-4 rounded-md shadow-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#1F2C56] resize-none bg-white text-black"
+            />
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="bg-[#1B264F] text-white px-6 py-2 rounded-md hover:bg-[#162143] transition"
+              >
+                SUBMIT
+              </button>
+            </div>
+          </form>
+        </div>
 
         {/* Recent Activity Table */}
         <h2 className="text-xl font-semibold text-[#1F2A44] mb-4">Recent Activity</h2>
@@ -189,6 +202,68 @@ export default function NoticeBoard() {
             </tbody>
           </table>
         </div>
+
+        {/* Edit Modal */}
+        {editingActivity && (
+          <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 max-w-lg w-full shadow-lg">
+              <h2 className="text-xl font-bold mb-4 text-[#1F2C56]">Edit Notice</h2>
+
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">User</label>
+                  <input
+                    type="text"
+                    value={editingActivity.user}
+                    onChange={(e) =>
+                      setEditingActivity({ ...editingActivity, user: e.target.value })
+                    }
+                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1F2C56] text-black"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Description</label>
+                  <input
+                    type="text"
+                    value={editingActivity.description}
+                    onChange={(e) =>
+                      setEditingActivity({ ...editingActivity, description: e.target.value })
+                    }
+                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1F2C56] text-black"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Date</label>
+                  <input
+                    type="text"
+                    value={editingActivity.date}
+                    onChange={(e) =>
+                      setEditingActivity({ ...editingActivity, date: e.target.value })
+                    }
+                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1F2C56] text-black"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end mt-6 space-x-3">
+                <button
+                  onClick={() => setEditingActivity(null)}
+                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveEdit}
+                  className="bg-[#1B264F] text-white px-4 py-2 rounded hover:bg-[#162143] transition"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
