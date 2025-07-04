@@ -1,5 +1,5 @@
-import DraughtsmanMechanical from '@/componets/coursess/draughtsmanmechanical'
-import OurTrade from '@/componets/coursess/our_trade'
+import DraughtsmanMechanical from '@/components/coursess/draughtsmanmechanical'
+import OurTrade from '@/components/coursess/our_trade'
 import React from 'react'
 
 export default function page() {

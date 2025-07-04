@@ -1,6 +1,6 @@
 
-import COPASection from '@/componets/coursess/copa'
-import OurTrade from '@/componets/coursess/our_trade'
+import COPASection from '@/components/coursess/copa'
+import OurTrade from '@/components/coursess/our_trade'
 
 import React from 'react'
 

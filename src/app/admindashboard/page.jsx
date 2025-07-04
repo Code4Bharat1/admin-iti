@@ -1,5 +1,5 @@
 
-import Dashboard from '@/components/admindashboard/dashboard'
+import Dashboard from '@/component/admindashboard/dashboard'
 import React from 'react'
 
 export default function page() {

@@ -1,5 +1,5 @@
-import ContactSection from '@/componets/contactus/hero'
-import Mapsection from '@/componets/contactus/map'
+import ContactSection from '@/components/contactus/hero'
+import Mapsection from '@/components/contactus/map'
 
 
 import React from 'react'

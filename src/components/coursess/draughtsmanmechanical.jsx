@@ -40,7 +40,7 @@ export default function DraughtsmanMechanical() {
         {/* Right Side - Description */}
         <div>
           <p className="text-gray-900 text-sm sm:text-base md:text-2xl mt-4 sm:mt-8 md:mt-20 text-justify">
-           This two-year course trains candidates in professional skills and knowledge related to mechanical drafting. It covers geometric construction, freehand drawing of machine components, and drawing sheet preparation. Students also gain practical training in allied trades like Fitter, Turner, Machinist, and Sheet Metal Worker. They learn to create detailed and assembly drawings of parts like pulleys, gears, and pipe fittings, and apply quality standards using AutoCAD. The course also includes 3D modeling, view generation, and plotting drawings in PDF format.
+           This two-year course trains candidates in professional skills and knowledge related to mechanical drafting. It covers geometric construction, freehand drawing of machine component, and drawing sheet preparation. Students also gain practical training in allied trades like Fitter, Turner, Machinist, and Sheet Metal Worker. They learn to create detailed and assembly drawings of parts like pulleys, gears, and pipe fittings, and apply quality standards using AutoCAD. The course also includes 3D modeling, view generation, and plotting drawings in PDF format.
           </p>
           </div>
           <div className="mt-6 sm:mt-7 md:mt-8">

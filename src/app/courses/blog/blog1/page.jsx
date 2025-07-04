@@ -1,5 +1,5 @@
 
-import Blog1 from '@/componets/coursess/blog/blog1'
+import Blog1 from '@/components/coursess/blog/blog1'
 import React from 'react'
 
 export default function page() {

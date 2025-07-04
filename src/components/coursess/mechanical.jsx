@@ -62,7 +62,7 @@ export default function MechanicalFitterSection() {
             </li>
             <li>
               Learn hands-on skills like marking, drilling, filing, grinding,
-              and assembling components used in various machines and structures.
+              and assembling component used in various machines and structures.
             </li>
             <li>
               Gain the ability to read and interpret technical diagrams and

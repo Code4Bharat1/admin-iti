@@ -58,10 +58,10 @@ export default function MarineWelder() {
               Understand types of welding (Arc, MIG, TIG, Gas) and their applications in marine structures.
             </li>
             <li>
-              Learn to weld ship hulls, tanks, and structural components using proper marine welding standards.
+              Learn to weld ship hulls, tanks, and structural component using proper marine welding standards.
             </li>
             <li>
-              Perform welding on steel pipes and marine components exposed to water pressure and harsh environments.
+              Perform welding on steel pipes and marine component exposed to water pressure and harsh environments.
             </li>
             <li>
               Introduction to underwater welding techniques and safety (advanced training may require specialization).

@@ -1,7 +1,7 @@
 
 
-import FacultyGridWithHover from '@/componets/faculty/faculty'
-import Faculty1 from '@/componets/faculty/teacher'
+import FacultyGridWithHover from '@/components/faculty/faculty'
+import Faculty1 from '@/components/faculty/teacher'
 
 import React from 'react'
 
