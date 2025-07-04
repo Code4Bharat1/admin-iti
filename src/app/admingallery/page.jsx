@@ -1,5 +1,5 @@
 
-import Gallery from '@/components/admingallery/gallery'
+import Gallery from '@/component/admingallery/gallery'
 import React from 'react'
 
 export default function page() {

@@ -1,7 +1,7 @@
 import React from 'react'
 
-import OurTrade from '@/componets/coursess/our_trade'
-import MarineElectricianSection from '@/componets/coursess/marine'
+import OurTrade from '@/components/coursess/our_trade'
+import MarineElectricianSection from '@/components/coursess/marine'
 
 
 export default function page() {

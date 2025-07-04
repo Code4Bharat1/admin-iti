@@ -1,8 +1,8 @@
-import TopRecruitersSwap from '@/componets/home/company'
-import PlacementSection from '@/componets/placement/hero'
-import PlacementStats from '@/componets/placement/placement'
-import PlacementLast from '@/componets/placement/placementlast'
-import PlacementProcess from '@/componets/placement/placementprocess'
+import TopRecruitersSwap from '@/components/home/company'
+import PlacementSection from '@/components/placement/hero'
+import PlacementStats from '@/components/placement/placement'
+import PlacementLast from '@/components/placement/placementlast'
+import PlacementProcess from '@/components/placement/placementprocess'
 import React from 'react'
 
 export default function page() {

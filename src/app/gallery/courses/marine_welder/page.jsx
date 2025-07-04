@@ -1,6 +1,6 @@
 
-import MarineWelder from '@/componets/coursess/mechanicalweldar'
-import OurTrade from '@/componets/coursess/our_trade'
+import MarineWelder from '@/components/coursess/mechanicalweldar'
+import OurTrade from '@/components/coursess/our_trade'
 import React from 'react'
 
 

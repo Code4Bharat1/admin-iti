@@ -1,5 +1,5 @@
 
-import TopperList from '@/components/admintopper/topper'
+import TopperList from '@/component/admintopper/topper'
 import React from 'react'
 
 export default function page() {

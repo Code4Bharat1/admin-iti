@@ -1,6 +1,6 @@
 
-import DraughtsmanCivil from '@/componets/coursess/drughtsmancivil'
-import OurTrade from '@/componets/coursess/our_trade'
+import DraughtsmanCivil from '@/components/coursess/drughtsmancivil'
+import OurTrade from '@/components/coursess/our_trade'
 
 import React from 'react'
 
