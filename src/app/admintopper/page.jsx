@@ -1,11 +1,11 @@
 
-import TopperList from '@/component/admintopper/topper'
+import TopperListWithSidebar from '@/components/admintopper/topper'
 import React from 'react'
 
 export default function page() {
   return (
     <div>
-        <TopperList/>
+        <TopperListWithSidebar/>
     
         </div>
   )

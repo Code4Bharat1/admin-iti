@@ -51,14 +51,35 @@ export default function TopperListWithSidebar() {
   ]);
 
   const [selectedYear, setSelectedYear] = useState(new Date());
+  const [showModal, setShowModal] = useState(false);
+  const [editingData, setEditingData] = useState({});
+  const [editingId, setEditingId] = useState(null);
+
   const router = useRouter();
 
   const handleDelete = (id) => {
     setStudents((prev) => prev.filter((s) => s.id !== id));
   };
 
-  const handleEdit = (id) => {
-    alert("Edit clicked for ID: " + id);
+  const handleEdit = (student) => {
+    setEditingData({ ...student });
+    setEditingId(student.id);
+    setShowModal(true);
+  };
+
+  const handleSaveEdit = () => {
+    setStudents((prev) =>
+      prev.map((s) => (s.id === editingId ? editingData : s))
+    );
+    setShowModal(false);
+    setEditingData({});
+    setEditingId(null);
+  };
+
+  const handleCancelEdit = () => {
+    setShowModal(false);
+    setEditingData({});
+    setEditingId(null);
   };
 
   const handleAddStudent = () => {
@@ -127,7 +148,6 @@ export default function TopperListWithSidebar() {
 
         {/* Year Selector + Add Column */}
         <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
-          {/* Year Picker inside white box */}
           <div className="flex items-center gap-2 border border-gray-400 px-4 py-2 rounded bg-white text-base">
             <FaCalendarAlt className="text-gray-600" />
             <span className="text-gray-600">Select Year</span>
@@ -149,7 +169,7 @@ export default function TopperListWithSidebar() {
           </button>
         </div>
 
-        {/* Table Container with Height and Scroll */}
+        {/* Table */}
         <div className="overflow-x-auto max-h-[600px] overflow-y-auto border border-gray-300 rounded-lg">
           <table className="min-w-full text-base">
             <thead className="sticky top-0 bg-[#1B264F] text-white text-left">
@@ -166,9 +186,9 @@ export default function TopperListWithSidebar() {
                   <td className="px-6 py-4">{student.name}</td>
                   <td className="px-6 py-4">{student.trade}</td>
                   <td className="px-6 py-4">{student.percentage}</td>
-                  <td className="px-6 py-4 space-x-4">
+                  <td className="px-6 py-4 space-x-2">
                     <button
-                      onClick={() => handleEdit(student.id)}
+                      onClick={() => handleEdit(student)}
                       className="text-green-600 hover:underline"
                     >
                       Edit
@@ -185,6 +205,64 @@ export default function TopperListWithSidebar() {
             </tbody>
           </table>
         </div>
+
+        {/* Modal */}
+        {showModal && (
+          <div className="fixed inset-0 backdrop-blur-sm bg-black/10 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+              <h3 className="text-xl font-semibold mb-4">Edit Student Details</h3>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-gray-700 mb-1">Name of Student</label>
+                  <input
+                    type="text"
+                    value={editingData.name}
+                    onChange={(e) =>
+                      setEditingData({ ...editingData, name: e.target.value })
+                    }
+                    className="border border-gray-300 rounded px-3 py-2 w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 mb-1">Name of Trade</label>
+                  <input
+                    type="text"
+                    value={editingData.trade}
+                    onChange={(e) =>
+                      setEditingData({ ...editingData, trade: e.target.value })
+                    }
+                    className="border border-gray-300 rounded px-3 py-2 w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 mb-1">Percentage</label>
+                  <input
+                    type="text"
+                    value={editingData.percentage}
+                    onChange={(e) =>
+                      setEditingData({ ...editingData, percentage: e.target.value })
+                    }
+                    className="border border-gray-300 rounded px-3 py-2 w-full"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end mt-6 space-x-4">
+                <button
+                  onClick={handleCancelEdit}
+                  className="px-4 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveEdit}
+                  className="px-4 py-2 rounded bg-[#1B264F] text-white hover:bg-[#16203d]"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

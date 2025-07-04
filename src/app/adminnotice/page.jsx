@@ -1,5 +1,5 @@
 
-import NoticeBoard from '@/component/adminnotice/noticeboard'
+import NoticeBoard from '@/components/adminnotice/noticeboard'
 import React from 'react'
 
 export default function page() {
