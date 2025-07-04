@@ -1,7 +1,9 @@
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import axios from 'axios';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -15,41 +17,10 @@ import {
   FaMedal,
   FaSignOutAlt,
 } from "react-icons/fa";
+ // adjust this path to your api.js
 
 export default function TopperListWithSidebar() {
-  const [students, setStudents] = useState([
-    {
-      id: 1,
-      name: "Hassan Salim Shaikh",
-      trade: "Computer Operator and Programming Assistant (COPA)",
-      percentage: "91.16%",
-    },
-    {
-      id: 2,
-      name: "Varad Jagdish Gurav",
-      trade: "Draughtman (Civil)",
-      percentage: "85.33%",
-    },
-    {
-      id: 3,
-      name: "Mufeez Moin Shaban",
-      trade: "Draughtman (Mechanical)",
-      percentage: "72.83%",
-    },
-    {
-      id: 4,
-      name: "Saurabh Tana ji Talape",
-      trade: "Marine Fitter",
-      percentage: "91.00%",
-    },
-    {
-      id: 5,
-      name: "Surve Devendra Jitendra",
-      trade: "Refrigeration and Air Conditioning Technician",
-      percentage: "87.16%",
-    },
-  ]);
-
+  const [students, setStudents] = useState([]);
   const [selectedYear, setSelectedYear] = useState(new Date());
   const [showModal, setShowModal] = useState(false);
   const [editingData, setEditingData] = useState({});
@@ -61,37 +32,19 @@ export default function TopperListWithSidebar() {
     setStudents((prev) => prev.filter((s) => s.id !== id));
   };
 
-  const handleEdit = (student) => {
-    setEditingData({ ...student });
-    setEditingId(student.id);
-    setShowModal(true);
+  const handleEdit = (id) => {
+    alert("Edit clicked for ID: " + id);
   };
 
   const handleAddStudent = () => {
-    setEditingData({ name: "", trade: "", percentage: "" });
-    setEditingId(null);
-    setShowModal(true);
-  };
-
-  const handleSaveEdit = () => {
-    if (editingId !== null) {
-      setStudents((prev) =>
-        prev.map((s) => (s.id === editingId ? editingData : s))
-      );
-    } else {
-      const newId =
-        students.length > 0 ? students[students.length - 1].id + 1 : 1;
-      setStudents((prev) => [...prev, { id: newId, ...editingData }]);
-    }
-    setShowModal(false);
-    setEditingData({});
-    setEditingId(null);
-  };
-
-  const handleCancelEdit = () => {
-    setShowModal(false);
-    setEditingData({});
-    setEditingId(null);
+    const newId = students.length > 0 ? students[students.length - 1].id + 1 : 1;
+    const newStudent = {
+      id: newId,
+      name: "New Student",
+      trade: "New Trade",
+      percentage: "0%",
+    };
+    setStudents((prev) => [...prev, newStudent]);
   };
 
   return (
@@ -188,6 +141,7 @@ export default function TopperListWithSidebar() {
           </button>
         </div>
 
+        {/* Table Container with Height and Scroll */}
         <div className="overflow-x-auto max-h-[600px] overflow-y-auto border border-gray-300 rounded-lg">
           <table className="min-w-full text-base">
             <thead className="sticky top-0 bg-[#1B264F] text-white text-left">
@@ -204,9 +158,9 @@ export default function TopperListWithSidebar() {
                   <td className="px-6 py-4">{student.name}</td>
                   <td className="px-6 py-4">{student.trade}</td>
                   <td className="px-6 py-4">{student.percentage}</td>
-                  <td className="px-6 py-4 space-x-2">
+                  <td className="px-6 py-4 space-x-4">
                     <button
-                      onClick={() => handleEdit(student)}
+                      onClick={() => handleEdit(student.id)}
                       className="text-green-600 hover:underline"
                     >
                       Edit
@@ -288,3 +242,5 @@ export default function TopperListWithSidebar() {
     </div>
   );
 }
+
+

@@ -67,7 +67,7 @@ export default function Blog1() {
           
           <ul className="list-disc pl-4 sm:pl-5 space-y-2 text-sm sm:text-base lg:text-lg">
             <li>Architectural Design: Draughtsman Civil collaborate with architects to transform design concepts into detailed architectural plans. They meticulously draft floor plans, elevations, and cross-sections, capturing every aspect of the building's design with precision and accuracy.</li>
-            <li>Structural Engineering: In collaboration with structural engineers, Draughtsman Civil create detailed drawings of structural component such as beams, columns, and foundations. These drawings provide vital information for contractors and construction crews, ensuring structural integrity and safety.</li>
+            <li>Structural Engineering: In collaboration with structural engineers, Draughtsman Civil create detailed drawings of structural components such as beams, columns, and foundations. These drawings provide vital information for contractors and construction crews, ensuring structural integrity and safety.</li>
             <li>Infrastructure Development: From highways and bridges to tunnels and drainage systems, Draughtsman Civil play a crucial role in the planning and design of infrastructure projects. Their drawings help visualize the layout and alignment of roads, utilities, and other essential elements of infrastructure development</li>
             <li>Urban Planning: In urban planning initiatives, Draughtsman Civil contribute to the development of master plans, zoning maps, and land use plans. Their expertise in drafting site plans and development layouts helps city planners visualize and implement sustainable urban development strategies.</li>
           </ul>

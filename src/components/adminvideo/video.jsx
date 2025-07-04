@@ -2,6 +2,9 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import axios from 'axios';
+import { useEffect } from "react";
+
 import {
   FaUserCircle,
   FaTachometerAlt,
@@ -18,33 +21,62 @@ export default function VideoGallery() {
   const router = useRouter();
   const fileInputRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [videos, setVideos] = useState([
-    { id: 1, src: "images/video1.png" },
-    { id: 2, src: "images/video2.png" },
-    { id: 3, src: "images/video3.png" },
-    { id: 4, src: "images/video4.png" },
-  ]);
+const [videos, setVideos] = useState([]);
+useEffect(() => {
+  const fetchVideos = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/admin/media/video'); // Make sure this is the correct backend route
+      setVideos(res.data);
+    } catch (err) {
+      console.error('Failed to fetch videos:', err);
+    }
+  };
+
+  fetchVideos();
+}, []);
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
   };
 
-  const handleDeleteFile = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-      setSelectedFile(null);
-    }
-  };
+const handleDelete = async (id) => {
+  try {
+    await axios.delete(`http://localhost:5000/api/admin/media/videos/${id}`);
+    setVideos(videos.filter((v) => v._id !== id));
+  } catch (err) {
+    console.error('Delete failed:', err);
+  }
+};
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (selectedFile) {
-      console.log("Uploading file:", selectedFile.name);
-      // TODO: Upload logic here
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (selectedFile) {
+    try {
+      const formData = new FormData();
+      formData.append('video', selectedFile); // This must match the multer field name!
+
+      const res = await axios.post(
+        'http://localhost:5000/api/admin/media/videos',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      // Add the new video to your state
+      setVideos([...videos, res.data]);
       setSelectedFile(null);
-      fileInputRef.current.value = "";
+      fileInputRef.current.value = '';
+
+    } catch (err) {
+      console.error('Upload failed:', err);
     }
-  };
+  }
+};
+
 
   return (
     <div className="flex min-h-screen">
@@ -146,21 +178,22 @@ export default function VideoGallery() {
 
         {/* Video Gallery */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {videos.map((video) => (
-            <div key={video.id} className="flex flex-col items-center">
-              <img
-                src={video.src}
-                alt={`Video ${video.id}`}
-                className="w-full h-auto rounded border border-gray-300"
-              />
-              <button
-                onClick={() => setVideos(videos.filter((v) => v.id !== video.id))}
-                className="text-red-600 mt-2 hover:underline"
-              >
-                Delete
-              </button>
-            </div>
-          ))}
+         {videos.map((video) => (
+  <div key={video._id} className="flex flex-col items-center">
+    <video
+      src={video.videoUrl}  // <- this must match your DB schema!
+      controls
+      className="w-full rounded border border-gray-300"
+    />
+    <button
+      onClick={() => handleDelete(video._id)}
+      className="text-red-600 mt-2 hover:underline"
+    >
+      Delete
+    </button>
+  </div>
+))}
+
         </div>
       </div>
     </div>

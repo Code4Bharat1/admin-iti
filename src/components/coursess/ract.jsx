@@ -83,7 +83,7 @@ export default function RACTandTrades() {
       etc.
     </li>
     <li>
-      Identify the various component of central AC test, Servicing of
+      Identify the various components of central AC test, Servicing of
       A.H.U, damper, check air flow, De-scaling of condenser and CT
       servicing.
     </li>

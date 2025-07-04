@@ -67,7 +67,7 @@ export default function Blog2() {
           </p>
 
           <p className="mb-4 text-sm sm:text-base">
-            These drawings serve as a blueprint for the fabrication, construction, and operation of mechanical devices, ranging from intricate component to large-scale machinery. Draughtsman Mechanical must possess a keen eye for detail, exceptional drafting skills, and proficiency in computer-aided design (CAD) software to accurately depict dimensions, tolerances, and materials.
+            These drawings serve as a blueprint for the fabrication, construction, and operation of mechanical devices, ranging from intricate components to large-scale machinery. Draughtsman Mechanical must possess a keen eye for detail, exceptional drafting skills, and proficiency in computer-aided design (CAD) software to accurately depict dimensions, tolerances, and materials.
           </p>
 
           <h2 className="text-lg sm:text-xl md:text-2xl font-bold mt-6 sm:mt-8 mb-4">
@@ -84,13 +84,13 @@ export default function Blog2() {
             <li>
               <strong>Manufacturing:</strong> In the manufacturing sector, Draughtsman Mechanical are
               instrumental in designing machinery, tools, and equipment used in production processes.
-              Their technical drawings guide the fabrication and assembly of component, ensuring
+              Their technical drawings guide the fabrication and assembly of components, ensuring
               seamless operation and efficiency in manufacturing operations.
             </li>
             <li>
               <strong>Engineering:</strong> Draughtsman Mechanical work closely with engineers in the
               design and development of mechanical systems, including HVAC (Heating, Ventilation, and
-              Air Conditioning) systems, automotive component, and industrial machinery. Their
+              Air Conditioning) systems, automotive components, and industrial machinery. Their
               expertise is crucial in conceptualizing, visualizing, and refining engineering designs
               before implementation.
             </li>
@@ -98,12 +98,12 @@ export default function Blog2() {
               <strong>Construction:</strong> In the construction industry, Draughtsman Mechanical
               contribute to the planning and design of mechanical systems within buildings and
               infrastructure projects. This includes HVAC systems, piping layouts, and structural
-              component, where precise drawings are essential for coordination and installation.
+              components, where precise drawings are essential for coordination and installation.
             </li>
             <li>
               <strong>Aerospace and Defense:</strong> The aerospace and defense sectors rely heavily on
               Draughtsman Mechanical for the design and development of aircraft, spacecraft, and
-              military hardware. Their drawings encompass everything from engine component and
+              military hardware. Their drawings encompass everything from engine components and
               structural elements to intricate systems vital for flight and defense applications.
             </li>
           </ul>
