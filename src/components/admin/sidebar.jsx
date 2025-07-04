@@ -15,7 +15,7 @@ export default function Sidebar() {
         <span className="text-lg  text-[#FFDF35]">abc@gmail.com</span>
       </div>
 
-      <div className="w-full px-4 space-y-4 mt-4 font-poppins text-sm">
+      <div className="w-full px-4 space-y-4 mt-4 font-poppins text-lg">
         <div
           onClick={() => router.push('/dashboard')}
           className="flex items-center space-x-2 bg-gray-200 text-black px-2 py-1 rounded cursor-pointer"
