@@ -128,27 +128,28 @@ export default function NoticeBoard() {
       <div className="flex-1 bg-[#EDF4FF] p-10">
         <h1 className="text-3xl font-bold text-[#1F2A44] mb-6">Notice board</h1>
 
-        {/* Add New Notice */}
-        <form onSubmit={handleSubmit} className="mb-10">
-          <label className="block font-medium text-lg text-gray-800 mb-2">
-            Add New Notice
-          </label>
-          <textarea
-            value={notice}
-            onChange={(e) => setNotice(e.target.value)}
-            placeholder="Enter your notice here"
-            rows={3}
-            className="w-full max-w-4xl border border-gray-300 rounded px-4 py-3 shadow-sm outline-none mb-4"
-          ></textarea>
-          <div>
-            <button
-              type="submit"
-              className="bg-[#1B264F] text-white px-6 py-2 rounded font-semibold tracking-wide"
-            >
-              SUBMIT
-            </button>
-          </div>
-        </form>
+       {/* Add New Notice */}
+<form onSubmit={handleSubmit} className="mb-10">
+  <label className="block font-medium text-lg text-gray-800 mb-2">
+    Add New Notice
+  </label>
+  <textarea
+    value={notice}
+    onChange={(e) => setNotice(e.target.value)}
+    placeholder="Enter your notice here"
+    rows={3}
+    className="w-full max-w-4xl border-b-2 border-gray-300 focus:border-blue-500 outline-none px-1 py-1 text-gray-800 placeholder-gray-500 mb-4"
+  ></textarea>
+  <div>
+    <button
+      type="submit"
+      className="bg-[#1B264F] text-white px-6 py-2 rounded font-semibold tracking-wide"
+    >
+      SUBMIT
+    </button>
+  </div>
+</form>
+
 
         {/* Recent Activity Table */}
         <h2 className="text-xl font-semibold text-[#1F2A44] mb-4">Recent Activity</h2>

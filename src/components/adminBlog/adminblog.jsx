@@ -139,31 +139,28 @@ export default function BlogPage() {
           </div>
 
           {/* Latest Blogs */}
-          <h3 className="text-left text-lg font-bold mb-4 text-[#1B264F]">Latest Blogs</h3>
-          <div className="flex justify-center">
-            <div className="bg-[#1B264F] text-white p-10 rounded-xl space-y-10 w-[860px]">
-              {blogs.map((blog) => (
-                <div key={blog.id} className="flex gap-8 items-start">
-                  <div className="w-72 h-48 relative flex-shrink-0">
-                    <Image src={blog.image} alt="Blog Image" fill className="object-cover rounded-md" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm space-x-3 mb-1">
-                      <button className="text-blue-400 hover:underline">Edit</button>
-                      <button className="text-red-400 hover:underline">Delete</button>
-                    </div>
-                    <h4 className="text-yellow-400 font-semibold text-md leading-snug">
-                      {blog.title}
-                    </h4>
-                    <p className="text-xs bg-white text-black px-2 py-0.5 inline-block rounded mt-1">
-                      {blog.date}
-                    </p>
-                  </div>
+          <h3 className="text-center text-2xl font-bold mb-6 text-[#1B264F]">Latest Blogs</h3>
+          <div className="bg-[#1B264F] text-white px-16 py-14 rounded-2xl space-y-12 max-w-[2000px] mx-auto w-full">
+            {blogs.map((blog) => (
+              <div key={blog.id} className="flex gap-6 items-start">
+                <div className="w-60 h-36 relative flex-shrink-0">
+                  <Image src={blog.image} alt="Blog Image" fill className="object-cover rounded-md" />
                 </div>
-              ))}
-            </div>
+                <div className="flex-1">
+                  <div className="text-sm space-x-3 mb-1">
+                    <button className="text-blue-400 hover:underline">Edit</button>
+                    <button className="text-red-400 hover:underline">Delete</button>
+                  </div>
+                  <h4 className="text-yellow-400 font-semibold text-lg leading-snug">
+                    {blog.title}
+                  </h4>
+                  <p className="text-xs bg-white text-black px-2 py-0.5 inline-block rounded mt-1">
+                    {blog.date}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
-
         </div>
       </div>
     </div>
