@@ -1,7 +1,7 @@
 
-import DubaiDry from '@/componentss/course/dubaidry'
-import OurTrade from '@/componentss/coursess/our_trade'
-import BlogSection from '@/componentss/home/blog'
+import DubaiDry from '@/components/course/dubaidry'
+import OurTrade from '@/components/coursess/our_trade'
+import BlogSection from '@/components/home/blog'
 import React from 'react'
 
 export default function page() {
