@@ -1,9 +1,8 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import axios from 'axios';
+import axios from 'axios'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -17,34 +16,75 @@ import {
   FaMedal,
   FaSignOutAlt,
 } from "react-icons/fa";
- // adjust this path to your api.js
+ 
 
 export default function TopperListWithSidebar() {
   const [students, setStudents] = useState([]);
   const [selectedYear, setSelectedYear] = useState(new Date());
-  const [showModal, setShowModal] = useState(false);
-  const [editingData, setEditingData] = useState({});
-  const [editingId, setEditingId] = useState(null);
-
   const router = useRouter();
 
-  const handleDelete = (id) => {
-    setStudents((prev) => prev.filter((s) => s.id !== id));
-  };
+  // ✅ Fetch students on mount
+  useEffect(() => {
+    const fetchToppers = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/admin/toppers/getTopper");
+        setStudents(res.data); // adjust if your API wraps data differently
+      } catch (err) {
+        console.error("Error fetching toppers:", err);
+      }
+    };
 
-  const handleEdit = (id) => {
-    alert("Edit clicked for ID: " + id);
-  };
+    fetchToppers();
+  }, []);
 
-  const handleAddStudent = () => {
-    const newId = students.length > 0 ? students[students.length - 1].id + 1 : 1;
+  // ✅ Add new student to backend
+  const handleAddStudent = async () => {
     const newStudent = {
-      id: newId,
       name: "New Student",
       trade: "New Trade",
       percentage: "0%",
     };
-    setStudents((prev) => [...prev, newStudent]);
+
+    try {
+      const res = await API.post("/addTopper", newStudent);
+      setStudents((prev) => [...prev, res.data]); // adjust if response wraps data
+    } catch (err) {
+      console.error("Error adding student:", err);
+    }
+  };
+
+  // ✅ Delete student from backend
+  const handleDelete = async (id) => {
+    try {
+      await API.delete(`/deleteTopper/${id}`);
+      setStudents((prev) => prev.filter((s) => s.id !== id));
+    } catch (err) {
+      console.error("Error deleting student:", err);
+    }
+  };
+
+  // ✅ Update student in backend
+  const handleEdit = async (id) => {
+    const updatedName = prompt("Enter new name:");
+    const updatedTrade = prompt("Enter new trade:");
+    const updatedPercentage = prompt("Enter new percentage:");
+
+    if (!updatedName || !updatedTrade || !updatedPercentage) return;
+
+    const updatedStudent = {
+      name: updatedName,
+      trade: updatedTrade,
+      percentage: updatedPercentage,
+    };
+
+    try {
+      const res = await API.put(`/updateTopper/${id}`, updatedStudent);
+      setStudents((prev) =>
+        prev.map((s) => (s.id === id ? res.data : s))
+      );
+    } catch (err) {
+      console.error("Error updating student:", err);
+    }
   };
 
   return (
@@ -64,45 +104,27 @@ export default function TopperListWithSidebar() {
             <FaTachometerAlt />
             <span>Dashboard</span>
           </div>
-          <div
-            onClick={() => router.push("/gallery")}
-            className="flex items-center space-x-2 cursor-pointer"
-          >
+          <div onClick={() => router.push("/gallery")} className="flex items-center space-x-2 cursor-pointer">
             <FaImages />
             <span>Gallery</span>
           </div>
-          <div
-            onClick={() => router.push("/video-gallery")}
-            className="flex items-center space-x-2 cursor-pointer"
-          >
+          <div onClick={() => router.push("/video-gallery")} className="flex items-center space-x-2 cursor-pointer">
             <FaVideo />
             <span>Video Gallery</span>
           </div>
-          <div
-            onClick={() => router.push("/notice-board")}
-            className="flex items-center space-x-2 cursor-pointer"
-          >
+          <div onClick={() => router.push("/notice-board")} className="flex items-center space-x-2 cursor-pointer">
             <FaClipboard />
             <span>Notice board</span>
           </div>
-          <div
-            onClick={() => router.push("/blogs")}
-            className="flex items-center space-x-2 cursor-pointer"
-          >
+          <div onClick={() => router.push("/blogs")} className="flex items-center space-x-2 cursor-pointer">
             <FaBlog />
             <span>Blogs</span>
           </div>
-          <div
-            onClick={() => router.push("/topper-list")}
-            className="flex items-center space-x-2 cursor-pointer"
-          >
+          <div onClick={() => router.push("/topper-list")} className="flex items-center space-x-2 cursor-pointer">
             <FaMedal />
             <span>Topper List</span>
           </div>
-          <div
-            onClick={() => router.push("/logout")}
-            className="flex items-center space-x-2 cursor-pointer"
-          >
+          <div onClick={() => router.push("/logout")} className="flex items-center space-x-2 cursor-pointer">
             <FaSignOutAlt />
             <span>Logout</span>
           </div>
@@ -111,15 +133,16 @@ export default function TopperListWithSidebar() {
 
       {/* Main Content */}
       <div className="flex-1 bg-[#f3f8ff] p-6 relative">
+        {/* Top Right Email */}
         <div className="absolute top-4 right-6 text-sm text-gray-800 flex items-center gap-2">
           abc@gmail.com <span className="text-xl">👤</span>
         </div>
 
-        <h2 className="text-4xl font-extrabold text-[#1F2A44] mb-6">
-          Edit Topper List
-        </h2>
+        <h2 className="text-4xl font-extrabold text-[#1F2A44] mb-6">Edit Topper List</h2>
 
+        {/* Year Selector + Add Column */}
         <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
+          {/* Year Picker inside white box */}
           <div className="flex items-center gap-2 border border-gray-400 px-4 py-2 rounded bg-white text-base">
             <FaCalendarAlt className="text-gray-600" />
             <span className="text-gray-600">Select Year</span>
@@ -141,7 +164,7 @@ export default function TopperListWithSidebar() {
           </button>
         </div>
 
-        {/* Table Container with Height and Scroll */}
+        {/* Table Container */}
         <div className="overflow-x-auto max-h-[600px] overflow-y-auto border border-gray-300 rounded-lg">
           <table className="min-w-full text-base">
             <thead className="sticky top-0 bg-[#1B264F] text-white text-left">
@@ -177,70 +200,7 @@ export default function TopperListWithSidebar() {
             </tbody>
           </table>
         </div>
-
-        {showModal && (
-          <div className="fixed inset-0 backdrop-blur-sm bg-black/10 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-black">
-              <h3 className="text-xl font-semibold mb-4 text-black">
-                {editingId !== null
-                  ? "Edit Student Details"
-                  : "Add New Student"}
-              </h3>
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-black mb-1">Name of Student</label>
-                  <input
-                    type="text"
-                    value={editingData.name}
-                    onChange={(e) =>
-                      setEditingData({ ...editingData, name: e.target.value })
-                    }
-                    className="border border-gray-300 rounded px-3 py-2 w-full text-black"
-                  />
-                </div>
-                <div>
-                  <label className="block text-black mb-1">Name of Trade</label>
-                  <input
-                    type="text"
-                    value={editingData.trade}
-                    onChange={(e) =>
-                      setEditingData({ ...editingData, trade: e.target.value })
-                    }
-                    className="border border-gray-300 rounded px-3 py-2 w-full text-black"
-                  />
-                </div>
-                <div>
-                  <label className="block text-black mb-1">Percentage</label>
-                  <input
-                    type="text"
-                    value={editingData.percentage}
-                    onChange={(e) =>
-                      setEditingData({ ...editingData, percentage: e.target.value })
-                    }
-                    className="border border-gray-300 rounded px-3 py-2 w-full text-black"
-                  />
-                </div>
-              </div>
-              <div className="flex justify-end mt-6 space-x-4">
-                <button
-                  onClick={handleCancelEdit}
-                  className="px-4 py-2 rounded bg-gray-300 text-black hover:bg-gray-400"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSaveEdit}
-                  className="px-4 py-2 rounded bg-[#1B264F] text-white hover:bg-[#16203d]"
-                >
-                  Save
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
 }
-
-
