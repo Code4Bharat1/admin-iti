@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import {
   FaUserCircle,
@@ -14,66 +15,113 @@ import {
 } from "react-icons/fa";
 
 export default function NoticeBoard() {
-  const router = useRouter();
-
-  const [notice, setNotice] = useState("Enter your notice here");
-  const [activities, setActivities] = useState([
-    {
-      id: 1,
-      user: "admin1@.com",
-      description: 'Added a new notice: "Final Exam Timetable"',
-      date: "19 June 2025",
-    },
-    {
-      id: 2,
-      user: "admin2@.com",
-      description: 'Deleted the notice: "Old Timetable Notice"',
-      date: "15 June 2025",
-    },
-    {
-      id: 3,
-      user: "admin3@.com",
-      description: 'Updated the notice: "Library Closed on Friday”',
-      date: "12 June 2025",
-    },
-  ]);
-
+  const [notice, setNotice] = useState("");
+  const [activities, setActivities] = useState([]);
   const [editingActivity, setEditingActivity] = useState(null);
 
-  const handleSubmit = (e) => {
+  const [token, setToken] = useState(null);
+  const router = useRouter(); // you also forgot to initialize router
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("token");
+      if (!storedToken) {
+        router.push("/login");
+      } else {
+        setToken(storedToken);
+      }
+    }
+  }, []);
+
+
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/admin/notices", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setActivities(res.data);
+      } catch (err) {
+        console.error("Error fetching notices:", err.message);
+      }
+    };
+
+    if (token) {
+      fetchNotices();
+    }
+  }, [token]);
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!notice.trim()) return;
-    const newActivity = {
-      id: Date.now(),
-      user: "admin1@.com",
-      description: `Added a new notice: "${notice}"`,
-      date: new Date().toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      }),
-    };
-    setActivities([newActivity, ...activities]);
-    setNotice("Enter your notice here");
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/admin/notices", {
+        description: notice,
+        date: new Date().toISOString(), // ISO format to allow backend to parse
+      },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setActivities((prev) => [res.data, ...prev]);
+      setNotice("");
+    } catch (err) {
+      console.error("Failed to add notice:", err.message);
+    }
   };
 
   const handleEdit = (id) => {
-    const activityToEdit = activities.find((a) => a.id === id);
-    setEditingActivity({ ...activityToEdit });
+    const activityToEdit = activities.find((a) => a._id === id);
+    if (activityToEdit) {
+      setEditingActivity({ ...activityToEdit });
+    }
   };
 
-  const handleSaveEdit = () => {
-    setActivities((prev) =>
-      prev.map((item) =>
-        item.id === editingActivity.id ? editingActivity : item
-      )
-    );
-    setEditingActivity(null);
+
+  const handleSaveEdit = async () => {
+    try {
+      const res = await axios.put(
+        `http://localhost:5000/api/admin/notices/${editingActivity._id}`, // use _id
+        {
+          description: editingActivity.description,
+          date: new Date(editingActivity.date).toISOString(),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setActivities((prev) =>
+        prev.map((item) => (item._id === editingActivity._id ? res.data : item))
+      );
+      setEditingActivity(null);
+    } catch (err) {
+      console.error("Failed to update notice:", err.message);
+    }
   };
 
-  const handleDelete = (id) => {
-    setActivities((prev) => prev.filter((activity) => activity.id !== id));
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/admin/notices/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setActivities((prev) => prev.filter((item) => item._id !== id));
+    } catch (err) {
+      console.error("Failed to delete notice:", err.message);
+    }
   };
+
 
   return (
     <div className="flex min-h-screen font-[poppins]">
@@ -178,20 +226,20 @@ export default function NoticeBoard() {
             </thead>
             <tbody className="bg-[#E4ECFD] text-gray-900">
               {activities.map((activity) => (
-                <tr key={activity.id} className="border-t border-gray-300">
+                <tr key={activity._id} className="border-t border-gray-300">
                   <td className="px-6 py-4">{activity.user}</td>
                   <td className="px-6 py-4">{activity.description}</td>
                   <td className="px-6 py-4">{activity.date}</td>
                   <td className="px-6 py-4 space-x-2">
                     <button
-                      onClick={() => handleEdit(activity.id)}
+                      onClick={() => handleEdit(activity._id)}
                       className="text-green-600 font-medium hover:underline"
                     >
                       Edit
                     </button>
                     |
                     <button
-                      onClick={() => handleDelete(activity.id)}
+                      onClick={() => handleDelete(activity._id)}
                       className="text-red-600 font-medium hover:underline"
                     >
                       Delete

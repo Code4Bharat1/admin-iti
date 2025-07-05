@@ -20,7 +20,7 @@ export default function Login() {
       const { token } = res.data;
 
       // Store token locally (could be cookie instead)
-      localStorage.setItem('adminToken', token);
+      localStorage.setItem('token', token);
 
       // Redirect to dashboard or admin page
       router.push('/');
