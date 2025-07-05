@@ -16,6 +16,7 @@ import {
   FaMedal,
   FaSignOutAlt,
 } from "react-icons/fa";
+
  
 
 export default function TopperListWithSidebar() {
@@ -24,44 +25,91 @@ export default function TopperListWithSidebar() {
   const router = useRouter();
 
   // ✅ Fetch students on mount
-  useEffect(() => {
-    const fetchToppers = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/api/admin/toppers/getTopper");
-        setStudents(res.data); // adjust if your API wraps data differently
-      } catch (err) {
-        console.error("Error fetching toppers:", err);
-      }
-    };
+useEffect(() => {
+  const fetchToppers = async () => {
+    try {
+      const adminToken = localStorage.getItem("adminToken"); // or wherever you store your admin token
 
-    fetchToppers();
-  }, []);
+      const res = await axios.get(
+        "http://localhost:5000/api/admin/toppers/getTopper",
+        {
+          headers: {
+            Authorization: `Bearer ${adminToken}`,
+          },
+        }
+      );
+
+      setStudents(res.data); // adjust if your API wraps data differently
+    } catch (err) {
+      console.error("Error fetching toppers:", err);
+    }
+  };
+
+  fetchToppers();
+}, []);
+
 
   // ✅ Add new student to backend
-  const handleAddStudent = async () => {
-    const newStudent = {
-      name: "New Student",
-      trade: "New Trade",
-      percentage: "0%",
-    };
-
-    try {
-      const res = await API.post("/addTopper", newStudent);
-      setStudents((prev) => [...prev, res.data]); // adjust if response wraps data
-    } catch (err) {
-      console.error("Error adding student:", err);
-    }
+const handleAddStudent = async () => {
+  const newStudent = {
+    studentName: "New Student",
+    trade: "New Trade",
+    percentage: "0",
   };
+
+  try {
+    const adminToken = localStorage.getItem("adminToken"); // check casing!
+    const res = await axios.post(
+      "http://localhost:5000/api/admin/toppers/addTopper",
+      newStudent,
+      {
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
+      }
+    );
+
+    // If your backend returns the whole updated list:
+    // setStudents(res.data);
+
+    // Or just add it locally:
+    setStudents((prev) => [...prev, res.data]);
+
+    console.log("Student added successfully!");
+  } catch (err) {
+    console.error("Error adding student:", err);
+  }
+};
+
 
   // ✅ Delete student from backend
-  const handleDelete = async (id) => {
-    try {
-      await API.delete(`/deleteTopper/${id}`);
-      setStudents((prev) => prev.filter((s) => s.id !== id));
-    } catch (err) {
-      console.error("Error deleting student:", err);
-    }
-  };
+const handleDelete = async (id) => {
+  try {
+    const adminToken = localStorage.getItem("adminToken");
+
+    const res = await axios.delete(
+      `http://localhost:5000/api/admin/toppers/deleteTopper/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
+      }
+    );
+
+    // If your backend returns the updated list:
+    // setStudents(res.data);
+
+    // OR remove the deleted student locally:
+    setStudents((prevStudents) =>
+      prevStudents.filter((student) => student._id !== id)
+    );
+
+    console.log("Student deleted successfully!");
+  } catch (err) {
+    console.error("Error deleting student:", err);
+  }
+};
+
 
   // ✅ Update student in backend
   const handleEdit = async (id) => {
@@ -72,15 +120,21 @@ export default function TopperListWithSidebar() {
     if (!updatedName || !updatedTrade || !updatedPercentage) return;
 
     const updatedStudent = {
-      name: updatedName,
+      studentName: updatedName,
       trade: updatedTrade,
       percentage: updatedPercentage,
     };
 
-    try {
-      const res = await API.put(`/updateTopper/${id}`, updatedStudent);
+    try {const adminToken=localStorage.getItem("adminToken")
+      const res = await axios.put(`http://localhost:5000/api/admin/toppers/updateTopper/${id}`, updatedStudent,
+        {
+          headers: {
+            Authorization:`Bearer ${adminToken}`
+          }
+        }
+      );
       setStudents((prev) =>
-        prev.map((s) => (s.id === id ? res.data : s))
+        prev.map((s) => (s._id === id ? res.data : s))
       );
     } catch (err) {
       console.error("Error updating student:", err);
@@ -177,19 +231,19 @@ export default function TopperListWithSidebar() {
             </thead>
             <tbody className="bg-white text-gray-800">
               {students.map((student) => (
-                <tr key={student.id} className="border-b border-gray-200">
-                  <td className="px-6 py-4">{student.name}</td>
+                <tr key={student._id} className="border-b border-gray-200">
+                  <td className="px-6 py-4">{student.studentName}</td>
                   <td className="px-6 py-4">{student.trade}</td>
                   <td className="px-6 py-4">{student.percentage}</td>
                   <td className="px-6 py-4 space-x-4">
                     <button
-                      onClick={() => handleEdit(student.id)}
+                      onClick={() => handleEdit(student._id)}
                       className="text-green-600 hover:underline"
                     >
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(student.id)}
+                      onClick={() => handleDelete(student._id)}
                       className="text-red-600 hover:underline"
                     >
                       Delete

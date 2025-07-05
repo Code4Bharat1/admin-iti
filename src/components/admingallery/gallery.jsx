@@ -23,18 +23,23 @@ export default function Gallery() {
   const [photos, setPhotos] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   useEffect(() => {
-  const fetchPhotos = async () => {
-    try {
-      const res = await axios.post('http://localhost:5000/api/admin/media/images');  // Make sure this matches your backend route
-      const data = await res.json();
-      setPhotos(data); // your API should return an array of image objects
-    } catch (err) {
-      console.error('Failed to fetch photos', err);
-    }
-  };
-
-  fetchPhotos();
-}, []);
+    const fetchPhotos = async () => {
+      try {
+        const adminToken = localStorage.getItem("adminToken");
+        const res = await axios.get('http://localhost:5000/api/admin/media/images', {
+          headers: {
+            Authorization: `Bearer ${adminToken}`
+          }
+        });
+        setPhotos(res.data); // Use res.data for axios, not res.json()
+      } catch (err) {
+        console.error('Failed to fetch photos', err);
+      }
+    };
+  
+    fetchPhotos();
+  }, []);
+  ;
 
   const handleDelete = (index) => {
     const updatedPhotos = [...photos];
@@ -173,26 +178,29 @@ const handleSubmit = async (e) => {
 
         {/* Gallery Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {photos.map((src, index) => (
-            <div key={index} className="flex flex-col items-center">
-              <div className="w-full aspect-square overflow-hidden rounded-md shadow-md">
-                <Image
-                  src={src}
-                  alt={`Photo ${index + 1}`}
-                  width={250}
-                  height={200}
-                  className="object-cover w-full h-full"
-                />
-              </div>
-              <button
-                onClick={() => handleDelete(index)}
-                className="mt-2 text-red-600 text-sm font-semibold"
-              >
-                Delete
-              </button>
-            </div>
-          ))}
+  {photos
+    .filter(photo => photo.imageUrl && photo.imageUrl.trim() !== "")
+    .map((photo, index) => (
+      <div key={index} className="flex flex-col items-center">
+        <div className="w-full aspect-square overflow-hidden rounded-md shadow-md">
+          <Image
+            src={photo.imageUrl}
+            alt={`Photo ${index + 1}`}
+            width={250}
+            height={200}
+            className="object-cover w-full h-full"
+          />
         </div>
+        <button
+          onClick={() => handleDelete(photo._id)} // Use ID not index!
+          className="mt-2 text-red-600 text-sm font-semibold"
+        >
+          Delete
+        </button>
+      </div>
+    ))}
+</div>
+
       </div>
     </div>
   );
