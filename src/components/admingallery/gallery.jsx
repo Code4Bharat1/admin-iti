@@ -40,42 +40,64 @@ export default function Gallery() {
     fetchPhotos();
   }, []);
   ;
-
-  const handleDelete = (index) => {
-    const updatedPhotos = [...photos];
-    updatedPhotos.splice(index, 1);
-    setPhotos(updatedPhotos);
+  const handleDelete = async (id) => {
+    try {
+      const adminToken = localStorage.getItem("adminToken");
+      await axios.delete(`http://localhost:5000/api/admin/media/images/${id}`, {
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
+      });
+  
+      // ✅ Frontend state se bhi hatao
+      const updatedPhotos = photos.filter(photo => photo._id !== id);
+      setPhotos(updatedPhotos);
+  
+      console.log("Image deleted successfully");
+    } catch (err) {
+      console.error("Failed to delete image:", err);
+    }
   };
+  
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (selectedFile) {
-    try {
-      const formData = new FormData();
-      formData.append('image', selectedFile);
-
-      const res = await axios.post(
-        'http://localhost:5000/api/admin/media/images',
-        formData,
-        {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        }
-      );
-
-      const newImage = res.data;
-      setPhotos([...photos, newImage]);
-      setSelectedFile(null);
-
-    } catch (err) {
-      console.error('Error uploading image:', err);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    if (selectedFile) {
+      try {
+        const adminToken = localStorage.getItem("adminToken");
+  
+        const formData = new FormData();
+        formData.append('image', selectedFile);
+  
+        const res = await axios.post(
+          'http://localhost:5000/api/admin/media/images',
+          formData,
+          {
+            headers: {
+              // ✅ DO NOT set Content-Type manually when using FormData
+              Authorization: `Bearer ${adminToken}`,
+            },
+          }
+        );
+  
+        const newImage = res.data;
+        setPhotos(prevPhotos => [...prevPhotos, newImage]);
+        setSelectedFile(null);
+  
+        console.log('Upload success:', newImage);
+      } catch (err) {
+        console.error('Error uploading image:', err);
+      }
+    } else {
+      console.warn('No file selected!');
     }
-  }
-};
-
+  };
+  
 
   const handleClear = () => {
     setSelectedFile(null);
@@ -183,13 +205,12 @@ const handleSubmit = async (e) => {
     .map((photo, index) => (
       <div key={index} className="flex flex-col items-center">
         <div className="w-full aspect-square overflow-hidden rounded-md shadow-md">
-          <Image
-            src={photo.imageUrl}
-            alt={`Photo ${index + 1}`}
-            width={250}
-            height={200}
-            className="object-cover w-full h-full"
-          />
+        <img 
+  src={photo.imageUrl} 
+  alt={`Photo ${index + 1}`} 
+  className="object-cover w-full h-full" 
+/>
+
         </div>
         <button
           onClick={() => handleDelete(photo._id)} // Use ID not index!
