@@ -19,9 +19,18 @@ import {
 
  
 
-export default function TopperListWithSidebar() {
+export default function TopperList() {
   const [students, setStudents] = useState([]);
   const [selectedYear, setSelectedYear] = useState(new Date());
+  const [showModal, setShowModal] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentStudentId, setCurrentStudentId] = useState(null);
+  const [formData, setFormData] = useState({
+    studentName: "",
+    trade: "",
+    percentage: "",
+  });
+
   const router = useRouter();
 
   // ✅ Fetch students on mount
@@ -210,13 +219,13 @@ const handleDelete = async (id) => {
             />
           </div>
 
-          <button
-            onClick={handleAddStudent}
-            className="bg-[#1B264F] text-white px-5 py-2 rounded text-base font-medium"
-          >
-            Add New Column
-          </button>
-        </div>
+        <button
+          onClick={openAddModal}
+          className="bg-[#1B264F] text-white px-5 py-2 rounded text-base font-medium"
+        >
+          Add New Topper
+        </button>
+      </div>
 
         {/* Table Container */}
         <div className="overflow-x-auto max-h-[600px] overflow-y-auto border border-gray-300 rounded-lg">
