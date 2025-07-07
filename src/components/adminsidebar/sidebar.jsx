@@ -87,7 +87,7 @@ export default function AdminSidebar() {
           className={`${baseLinkStyle} ${isActive('/logout') ? activeStyle : inactiveStyle}`}
         >
           <FaSignOutAlt className="text-lg" />
-          <span className="text-sm">Logout</span>
+          <span className="text-sm text-red-500">Logout</span>
         </div>
       </div>
     </div>
