@@ -25,15 +25,24 @@ export default function BlogPage() {
   }, []);
 
   useEffect(() => {
-    if (token) {
-      axios
-        .get('http://localhost:5000/api/admin/blogs', {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => setBlogs(res.data))
-        .catch((err) => console.error('Fetch failed:', err));
-    }
+    if (!token) return; // wait until token is available
+
+    const fetchBlogs = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/admin/blogs', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setBlogs(response.data);
+      } catch (error) {
+        console.error('Failed to fetch blogs:', error);
+      }
+    };
+
+    fetchBlogs();
   }, [token]);
+
 
   const handleDelete = async (id) => {
     try {
@@ -171,75 +180,47 @@ export default function BlogPage() {
           </div>
         </form>
 
-        {/* Latest Blogs */}
-        <h3 className="text-2xl font-bold mb-6 text-[#1B264F]">Latest Blogs</h3>
-        <div className="bg-[#1B264F] text-white px-6 py-10 rounded-2xl space-y-12 max-w-4xl">
-          {blogs.map((blog) => (
-            <div key={blog._id} className="flex gap-6 items-start">
-              <div className="w-60 h-36 relative flex-shrink-0">
-                <Image src={blog.image} alt="Blog" fill className="object-cover rounded-md" />
-              </div>
-              <div className="flex-1">
-                <div className="text-sm space-x-3 mb-1">
-                  <button className="text-blue-400 hover:underline" onClick={() => handleEdit(blog)}>
-                    Edit
-                  </button>
-                  <button className="text-red-400 hover:underline" onClick={() => handleDelete(blog._id)}>
-                    Delete
-                  </button>
+          {/* Latest Blogs */}
+          <h3 className="text-center text-2xl font-bold mb-6 text-[#1B264F]">Latest Blogs</h3>
+          <div className="bg-[#1B264F] text-white px-16 py-14 rounded-2xl space-y-12 max-w-[2000px] mx-auto w-full">
+            {blogs.map((blog) => (
+              <div key={blog._id} className="flex gap-6 items-start">
+                <div className="w-60 h-36 relative flex-shrink-0">
+                  {blog.image ? (
+                    <Image src={blog.image} alt="Blog Image" fill className="object-cover rounded-md" />
+                  ) : (
+                    <div className="w-60 h-36 bg-gray-300 flex items-center justify-center rounded-md text-gray-600 text-sm">
+                      No Image
+                    </div>
+                  )}
                 </div>
-                <h4 className="text-yellow-400 font-semibold text-lg leading-snug">{blog.title}</h4>
-                <p className="text-xs bg-white text-black px-2 py-0.5 inline-block rounded mt-1">
-                  {blog.date}
-                </p>
+                <div className="flex-1">
+                  <div className="text-sm space-x-3 mb-1">
+                    <button
+                      className="text-blue-400 hover:underline"
+                      onClick={() => handleEdit(blog)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="text-red-400 hover:underline"
+                      onClick={() => handleDelete(blog._id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                  <h4 className="text-yellow-400 font-semibold text-lg leading-snug">
+                    {blog.title}
+                  </h4>
+                  <p className="text-xs bg-white text-black px-2 py-0.5 inline-block rounded mt-1">
+                    {blog.date}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Edit Modal with Blur */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 backdrop-blur-md bg-black/10 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md relative">
-            <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-2 right-2 text-gray-600 hover:text-black"
-            >
-              <FaTimes />
-            </button>
-            <h2 className="text-xl font-bold mb-4 text-[#1B264F]">Edit Blog</h2>
-
-            <form onSubmit={handleSubmit}>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full mb-3 border border-gray-300 rounded px-3 py-2 text-black"
-                placeholder="Title"
-              />
-              <input
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="w-full mb-3 border border-gray-300 rounded px-3 py-2 text-black"
-              />
-              <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                className="w-full mb-4 border border-gray-300 rounded px-3 py-2 text-black"
-                placeholder="Content"
-                rows={4}
-              ></textarea>
-              <div className="text-right">
-                <button type="submit" className="bg-[#1B264F] text-white px-5 py-2 rounded hover:bg-[#14203c]">
-                  Save Changes
-                </button>
-              </div>
-            </form>
+            ))}
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
