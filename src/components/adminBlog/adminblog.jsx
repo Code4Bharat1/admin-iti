@@ -184,6 +184,8 @@ export default function BlogPage() {
           <input
             type="text"
             placeholder="Enter Blog Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             className="w-full bg-white border border-gray-300 rounded px-4 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
@@ -192,6 +194,8 @@ export default function BlogPage() {
               <label className="block font-semibold text-[#1B264F] mb-1">Date :</label>
               <input
                 type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
                 className="w-full bg-white border border-gray-300 rounded px-4 py-2 shadow focus:outline-none"
               />
             </div>
@@ -218,25 +222,42 @@ export default function BlogPage() {
           <label className="block font-semibold text-[#1B264F] mb-1">Content :</label>
           <textarea
             placeholder="Write your blog content here"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
             className="w-full bg-white border border-gray-300 rounded px-4 py-2 h-48 mb-6 shadow focus:outline-none"
           ></textarea>
 
           <div className="text-center mb-10">
-            <button className="bg-[#1B264F] text-white px-6 py-2 rounded shadow hover:bg-[#14203c]">SUBMIT</button>
+            <button
+              className="bg-[#1B264F] text-white px-6 py-2 rounded shadow hover:bg-[#14203c]"
+              onClick={handleSubmit}
+            >
+              {isEditing ? 'UPDATE BLOG' : 'SUBMIT'}
+            </button>
           </div>
 
           {/* Latest Blogs */}
           <h3 className="text-center text-2xl font-bold mb-6 text-[#1B264F]">Latest Blogs</h3>
           <div className="bg-[#1B264F] text-white px-16 py-14 rounded-2xl space-y-12 max-w-[2000px] mx-auto w-full">
             {blogs.map((blog) => (
-              <div key={blog.id} className="flex gap-6 items-start">
+              <div key={blog._id} className="flex gap-6 items-start">
                 <div className="w-60 h-36 relative flex-shrink-0">
                   <Image src={blog.image} alt="Blog Image" fill className="object-cover rounded-md" />
                 </div>
                 <div className="flex-1">
                   <div className="text-sm space-x-3 mb-1">
-                    <button className="text-blue-400 hover:underline">Edit</button>
-                    <button className="text-red-400 hover:underline">Delete</button>
+                    <button
+                      className="text-blue-400 hover:underline"
+                      onClick={() => handleEdit(blog)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="text-red-400 hover:underline"
+                      onClick={() => handleDelete(blog._id)}
+                    >
+                      Delete
+                    </button>
                   </div>
                   <h4 className="text-yellow-400 font-semibold text-lg leading-snug">
                     {blog.title}
