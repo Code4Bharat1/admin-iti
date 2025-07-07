@@ -1,7 +1,7 @@
 import React from 'react'
-import AboutUsPage from '@/components/aboutus/about'
-import OurManagement from '@/components/aboutus/ourmanagement'
-import ManagementCommittee from '@/components/aboutus/institute'
+import AboutUsPage from '@/componentss/aboutus/about'
+import OurManagement from '@/componentss/aboutus/ourmanagement'
+import ManagementCommittee from '@/componentss/aboutus/institute'
 
 
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
@@ -8,31 +8,120 @@ import {
   FaTrashAlt,
   FaTimes,
 } from 'react-icons/fa';
+import axios from 'axios';
 
 export default function BlogPage() {
-  const router = useRouter();
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [date, setDate] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
-  const [editBlog, setEditBlog] = useState(null);
-  const [blogs] = useState([
-    {
-      id: 1,
-      image: '/images/blog11.png',
-      title: 'Unveiling the Craft of Draughtsman Civil: Architects of Structural Ingenuity',
-      date: 'Wednesday, April 10, 2024',
-    },
-    {
-      id: 2,
-      image: '/images/blog2.png',
-      title: 'Exploring the Craft of Refrigeration & Air Conditioning Technicians (RACT): Masters of Climate Control',
-      date: 'Wednesday, April 10, 2024',
-    },
-    {
-      id: 3,
-      image: '/images/blog3.png',
-      title: 'Exploring the Role and Importance of Draughtsman Mechanical',
-      date: 'Wednesday, April 10, 2024',
-    },
-  ]);
+  const [blogs, setBlogs] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editBlogId, setEditBlogId] = useState(null);
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setToken(token);
+  }, []);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/admin/blogs', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setBlogs(response.data);
+      } catch (error) {
+        console.error('Failed to fetch blogs:', error);
+      }
+    };
+
+    fetchBlogs();
+  }, [token]);
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/admin/blogs/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== id));
+      alert('Blog deleted successfully');
+    } catch (error) {
+      console.error('Failed to delete blog:', error);
+      alert('Failed to delete blog');
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = {
+      title,
+      content,
+      date,
+      image: selectedFile, // If using multipart form, you can conditionally change this
+    };
+
+    try {
+      if (isEditing) {
+        await axios.put(`http://localhost:5000/api/admin/blogs/${editBlogId}`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        alert('Blog updated successfully!');
+      } else {
+        const newFormData = new FormData();
+        newFormData.append('title', title);
+        newFormData.append('content', content);
+        newFormData.append('date', date);
+        if (selectedFile) newFormData.append('image', selectedFile);
+
+        await axios.post('http://localhost:5000/api/admin/blogs', newFormData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        alert('Blog created successfully!');
+      }
+
+      setTitle('');
+      setContent('');
+      setDate('');
+      setSelectedFile(null);
+      setIsEditing(false);
+      setEditBlogId(null);
+
+      // Refresh blog list
+      const response = await axios.get('http://localhost:5000/api/admin/blogs',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      setBlogs(response.data);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to save blog');
+    }
+  };
+
+  const handleEdit = (blog) => {
+    setTitle(blog.title);
+    setContent(blog.content);
+    setDate(new Date(blog.date).toISOString().split('T')[0]); // format to YYYY-MM-DD
+    setEditBlogId(blog._id);
+    setIsEditing(true);
+  };
 
   return (
     <div className="relative font-[poppins] min-h-screen">
@@ -91,21 +180,21 @@ export default function BlogPage() {
           <div className="w-full lg:w-2/3">
             <h2 className="text-2xl font-bold text-[#1B264F] mb-6">Add New Blog</h2>
 
-            <label className="block font-semibold text-[#1B264F] mb-1">Title :</label>
-            <input
-              type="text"
-              placeholder="Enter Blog Title"
-              className="w-full bg-white border border-gray-300 rounded px-4 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black placeholder-black"
-            />
+          <label className="block font-semibold text-[#1B264F] mb-1">Title :</label>
+          <input
+            type="text"
+            placeholder="Enter Blog Title"
+            className="w-full bg-white border border-gray-300 rounded px-4 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
 
-            <div className="flex flex-wrap gap-6 items-center mb-6">
-              <div className="flex-1">
-                <label className="block font-semibold text-[#1B264F] mb-1">Date :</label>
-                <input
-                  type="date"
-                  className="w-full bg-white border border-gray-300 rounded px-4 py-2 shadow focus:outline-none text-black"
-                />
-              </div>
+          <div className="flex flex-wrap gap-6 items-center mb-6">
+            <div className="flex-1">
+              <label className="block font-semibold text-[#1B264F] mb-1">Date :</label>
+              <input
+                type="date"
+                className="w-full bg-white border border-gray-300 rounded px-4 py-2 shadow focus:outline-none"
+              />
+            </div>
 
               <div className="flex-1">
                 <label className="block font-semibold text-[#1B264F] mb-1">Add Image :</label>
@@ -126,44 +215,38 @@ export default function BlogPage() {
               </div>
             </div>
 
-            <label className="block font-semibold text-[#1B264F] mb-1">Content :</label>
-            <textarea
-              placeholder="Write your blog content here"
-              className="w-full bg-white border border-gray-300 rounded px-4 py-2 h-48 mb-6 shadow focus:outline-none text-black placeholder-black"
-            ></textarea>
+          <label className="block font-semibold text-[#1B264F] mb-1">Content :</label>
+          <textarea
+            placeholder="Write your blog content here"
+            className="w-full bg-white border border-gray-300 rounded px-4 py-2 h-48 mb-6 shadow focus:outline-none"
+          ></textarea>
 
-            <div className="text-center mb-10">
-              <button className="bg-[#1B264F] text-white px-6 py-2 rounded shadow hover:bg-[#14203c]">SUBMIT</button>
-            </div>
+          <div className="text-center mb-10">
+            <button className="bg-[#1B264F] text-white px-6 py-2 rounded shadow hover:bg-[#14203c]">SUBMIT</button>
+          </div>
 
-            {/* Latest Blogs */}
-            <h3 className="text-center text-2xl font-bold mb-6 text-[#1B264F]">Latest Blogs</h3>
-            <div className="bg-[#1B264F] text-white px-16 py-14 rounded-2xl space-y-12 max-w-[2000px] mx-auto w-full">
-              {blogs.map((blog) => (
-                <div key={blog.id} className="flex gap-6 items-start">
-                  <div className="w-60 h-36 relative flex-shrink-0">
-                    <Image src={blog.image} alt="Blog Image" fill className="object-cover rounded-md" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm space-x-3 mb-1">
-                      <button
-                        className="text-blue-400 hover:underline"
-                        onClick={() => setEditBlog(blog)}
-                      >
-                        Edit
-                      </button>
-                      <button className="text-red-400 hover:underline">Delete</button>
-                    </div>
-                    <h4 className="text-yellow-400 font-semibold text-lg leading-snug">
-                      {blog.title}
-                    </h4>
-                    <p className="text-xs bg-white text-black px-2 py-0.5 inline-block rounded mt-1">
-                      {blog.date}
-                    </p>
-                  </div>
+          {/* Latest Blogs */}
+          <h3 className="text-center text-2xl font-bold mb-6 text-[#1B264F]">Latest Blogs</h3>
+          <div className="bg-[#1B264F] text-white px-16 py-14 rounded-2xl space-y-12 max-w-[2000px] mx-auto w-full">
+            {blogs.map((blog) => (
+              <div key={blog.id} className="flex gap-6 items-start">
+                <div className="w-60 h-36 relative flex-shrink-0">
+                  <Image src={blog.image} alt="Blog Image" fill className="object-cover rounded-md" />
                 </div>
-              ))}
-            </div>
+                <div className="flex-1">
+                  <div className="text-sm space-x-3 mb-1">
+                    <button className="text-blue-400 hover:underline">Edit</button>
+                    <button className="text-red-400 hover:underline">Delete</button>
+                  </div>
+                  <h4 className="text-yellow-400 font-semibold text-lg leading-snug">
+                    {blog.title}
+                  </h4>
+                  <p className="text-xs bg-white text-black px-2 py-0.5 inline-block rounded mt-1">
+                    {blog.date}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

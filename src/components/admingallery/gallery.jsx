@@ -4,33 +4,79 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { FaTrashAlt } from 'react-icons/fa';
 
-export default function AdminGallery() {
-  // Correct static image paths (absolute, start from /images/)
-  const [photos, setPhotos] = useState([
-    '/images/pho1.png',
-    '/images/pho2.png',
-    '/images/pho3.png',
-    '/images/pho4.png',
-    '/images/pho5.png',
-    '/images/pho6.png',
-    '/images/pho7.png',
-    '/images/pho8.png',
-    '/images/pho9.png',
-    '/images/pho10.png',
-    '/images/pho11.png',
-    '/images/pho12.png',
-    '/images/pho13.png',
-    '/images/pho14.png',
-    '/images/pho15.png',
-    '/images/pho16.png',
-    '/images/pho17.png',
-    '/images/pho18.png',
-  ]);
+export default function Gallery() {
+  const router = useRouter();
+  const [photos, setPhotos] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
+  useEffect(() => {
+    const fetchPhotos = async () => {
+      try {
+        const adminToken = localStorage.getItem("adminToken");
+        const res = await axios.get('http://localhost:5000/api/admin/media/images', {
+          headers: {
+            Authorization: `Bearer ${adminToken}`
+          }
+        });
+        setPhotos(res.data); // Use res.data for axios, not res.json()
+      } catch (err) {
+        console.error('Failed to fetch photos', err);
+      }
+    };
+  
+    fetchPhotos();
+  }, []);
+  ;
+  const handleDelete = async (id) => {
+    try {
+      const adminToken = localStorage.getItem("adminToken");
+      await axios.delete(`http://localhost:5000/api/admin/media/images/${id}`, {
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
+      });
+  
+      // ✅ Frontend state se bhi hatao
+      const updatedPhotos = photos.filter(photo => photo._id !== id);
+      setPhotos(updatedPhotos);
+  
+      console.log("Image deleted successfully");
+    } catch (err) {
+      console.error("Failed to delete image:", err);
+    }
+  };
 
-  const handleDelete = (index) => {
-    const updatedPhotos = [...photos];
-    updatedPhotos.splice(index, 1);
-    setPhotos(updatedPhotos);
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (selectedFile) {
+    try {
+      const formData = new FormData();
+      formData.append('image', selectedFile);
+
+      const res = await axios.post(
+        'http://localhost:5000/api/admin/media/images',
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
+
+      const newImage = res.data;
+      setPhotos([...photos, newImage]);
+      setSelectedFile(null);
+
+    } catch (err) {
+      console.error('Error uploading image:', err);
+    }
+  }
+};
+
+
+  const handleClear = () => {
+    setSelectedFile(null);
   };
 
   return (
@@ -70,20 +116,20 @@ export default function AdminGallery() {
         <h2 className="text-4xl font-extrabold text-[#1F2A44] mb-6 text-center">Gallery</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {photos.map((photo, index) => (
+          {photos.map((src, index) => (
             <div key={index} className="flex flex-col items-center">
-              <div className="w-full h-52 overflow-hidden rounded-md shadow-md bg-white">
+              <div className="w-full aspect-square overflow-hidden rounded-md shadow-md">
                 <Image
-                  src={photo}
-                  alt={`Blog ${index + 1}`}
-                  width={300}
+                  src={src}
+                  alt={`Photo ${index + 1}`}
+                  width={250}
                   height={200}
                   className="object-cover w-full h-full"
                 />
               </div>
               <button
                 onClick={() => handleDelete(index)}
-                className="mt-2 px-4 py-1 bg white text-red-600 rounede-full text-sm font-semibold shadow hover:shadow-md cursor-pointer border border-red-300 transition"
+                className="mt-2 text-red-600 text-sm font-semibold"
               >
                 Delete
               </button>

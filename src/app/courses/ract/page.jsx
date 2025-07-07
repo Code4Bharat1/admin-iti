@@ -1,5 +1,5 @@
-import OurTrade from '@/components/coursess/our_trade'
-import RACTandTrades from '@/components/coursess/ract'
+import OurTrade from '@/componentss/coursess/our_trade'
+import RACTandTrades from '@/componentss/coursess/ract'
 
 import React from 'react'
 
