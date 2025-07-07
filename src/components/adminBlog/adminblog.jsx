@@ -180,45 +180,44 @@ export default function BlogPage() {
           </div>
         </form>
 
-          {/* Latest Blogs */}
-          <h3 className="text-center text-2xl font-bold mb-6 text-[#1B264F]">Latest Blogs</h3>
-          <div className="bg-[#1B264F] text-white px-16 py-14 rounded-2xl space-y-12 max-w-[2000px] mx-auto w-full">
-            {blogs.map((blog) => (
-              <div key={blog._id} className="flex gap-6 items-start">
-                <div className="w-60 h-36 relative flex-shrink-0">
-                  {blog.image ? (
-                    <Image src={blog.image} alt="Blog Image" fill className="object-cover rounded-md" />
-                  ) : (
-                    <div className="w-60 h-36 bg-gray-300 flex items-center justify-center rounded-md text-gray-600 text-sm">
-                      No Image
-                    </div>
-                  )}
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm space-x-3 mb-1">
-                    <button
-                      className="text-blue-400 hover:underline"
-                      onClick={() => handleEdit(blog)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="text-red-400 hover:underline"
-                      onClick={() => handleDelete(blog._id)}
-                    >
-                      Delete
-                    </button>
+        {/* Latest Blogs */}
+        <h3 className="text-center text-2xl font-bold mb-6 text-[#1B264F]">Latest Blogs</h3>
+        <div className="bg-[#1B264F] text-white px-16 py-14 rounded-2xl space-y-12 max-w-[2000px] mx-auto w-full">
+          {blogs.map((blog) => (
+            <div key={blog._id} className="flex gap-6 items-start">
+              <div className="w-60 h-36 relative flex-shrink-0">
+                {blog.image ? (
+                  <Image src={blog.image} alt="Blog Image" fill className="object-cover rounded-md" />
+                ) : (
+                  <div className="w-60 h-36 bg-gray-300 flex items-center justify-center rounded-md text-gray-600 text-sm">
+                    No Image
                   </div>
-                  <h4 className="text-yellow-400 font-semibold text-lg leading-snug">
-                    {blog.title}
-                  </h4>
-                  <p className="text-xs bg-white text-black px-2 py-0.5 inline-block rounded mt-1">
-                    {blog.date}
-                  </p>
-                </div>
+                )}
               </div>
-            ))}
-          </div>
+              <div className="flex-1">
+                <div className="text-sm space-x-3 mb-1">
+                  <button
+                    className="text-blue-400 hover:underline"
+                    onClick={() => handleEdit(blog)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="text-red-400 hover:underline"
+                    onClick={() => handleDelete(blog._id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+                <h4 className="text-yellow-400 font-semibold text-lg leading-snug">
+                  {blog.title}
+                </h4>
+                <p className="text-xs bg-white text-black px-2 py-0.5 inline-block rounded mt-1">
+                  {blog.date}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
