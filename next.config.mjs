@@ -4,7 +4,8 @@ const nextConfig = {
     domains: [
       'www.shutterstock.com',
       'images.app.goo.gl',
-      'localhost',  // ✅ allow your local backend host
+      'localhost',
+      'imgs.search.brave.com', // ✅ Add this line
     ],
     remotePatterns: [
       {
@@ -17,4 +18,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig; // ✅ Use CommonJS if using next.config.js
+export default nextConfig;

@@ -32,12 +32,14 @@ export default function BlogPage() {
   }, []);
 
   useEffect(() => {
+    if (!token) return; // wait until token is available
+
     const fetchBlogs = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/admin/blogs', {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
         setBlogs(response.data);
       } catch (error) {
@@ -47,6 +49,7 @@ export default function BlogPage() {
 
     fetchBlogs();
   }, [token]);
+
 
   const handleDelete = async (id) => {
     try {
@@ -244,7 +247,13 @@ export default function BlogPage() {
             {blogs.map((blog) => (
               <div key={blog._id} className="flex gap-6 items-start">
                 <div className="w-60 h-36 relative flex-shrink-0">
-                  <Image src={blog.image} alt="Blog Image" fill className="object-cover rounded-md" />
+                  {blog.image ? (
+                    <Image src={blog.image} alt="Blog Image" fill className="object-cover rounded-md" />
+                  ) : (
+                    <div className="w-60 h-36 bg-gray-300 flex items-center justify-center rounded-md text-gray-600 text-sm">
+                      No Image
+                    </div>
+                  )}
                 </div>
                 <div className="flex-1">
                   <div className="text-sm space-x-3 mb-1">
