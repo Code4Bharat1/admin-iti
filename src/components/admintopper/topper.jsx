@@ -24,12 +24,12 @@ export default function TopperList() {
   useEffect(() => {
     const fetchToppers = async () => {
       try {
-        const adminToken = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
         const res = await axios.get(
           "http://localhost:5000/api/admin/toppers/getTopper",
           {
             headers: {
-              Authorization: `Bearer ${adminToken}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -61,13 +61,13 @@ export default function TopperList() {
 
   const handleAddStudent = async () => {
     try {
-      const adminToken = localStorage.getItem("adminToken");
+      const token = localStorage.getItem("token");
       const res = await axios.post(
         "http://localhost:5000/api/admin/toppers/addTopper",
         formData,
         {
           headers: {
-            Authorization: `Bearer ${adminToken}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -82,13 +82,13 @@ export default function TopperList() {
 
   const handleEditSave = async () => {
     try {
-      const adminToken = localStorage.getItem("adminToken");
+      const token = localStorage.getItem("token");
       const res = await axios.put(
         `http://localhost:5000/api/admin/toppers/updateTopper/${editingStudent._id}`,
         formData,
         {
           headers: {
-            Authorization: `Bearer ${adminToken}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -105,12 +105,12 @@ export default function TopperList() {
 
   const handleDelete = async (id) => {
     try {
-      const adminToken = localStorage.getItem("adminToken");
+      const token = localStorage.getItem("token");
       await axios.delete(
         `http://localhost:5000/api/admin/toppers/deleteTopper/${id}`,
         {
           headers: {
-            Authorization: `Bearer ${adminToken}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
