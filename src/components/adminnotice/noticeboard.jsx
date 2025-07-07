@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 export default function NoticeBoard() {
   const router = useRouter();
+  const [token, setToken] = useState(null);
 
   const [notice, setNotice] = useState("Enter your notice here");
   const [activities, setActivities] = useState([

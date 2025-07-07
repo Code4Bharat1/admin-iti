@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter, usePathname } from 'next/navigation';
+
 import {
   FaUserCircle,
   FaTachometerAlt,
@@ -82,7 +83,7 @@ export default function AdminSidebar() {
         </div>
 
         <div
-          onClick={() => router.push('/logout')}
+          onClick={() => router.push('/login')}
           className={`${baseLinkStyle} ${isActive('/logout') ? activeStyle : inactiveStyle}`}
         >
           <FaSignOutAlt className="text-lg" />
