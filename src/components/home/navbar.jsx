@@ -17,34 +17,7 @@ export default function Navbar() {
     setIsLoggedIn(!!auth);
   }, []);
 
-  useEffect(() => {
-    // Continuous marquee animation
-    let animationId;
-    let position = 0;
-    
-    const animate = () => {
-      if (marqueeRef.current) {
-        position -= 2; // Speed of movement (adjust as needed)
-        
-        // Reset position when text has moved completely off screen
-        if (position <= -marqueeRef.current.scrollWidth / 2) {
-          position = 0;
-        }
-        
-        marqueeRef.current.style.transform = `translateX(${position}px)`;
-      }
-      animationId = requestAnimationFrame(animate);
-    };
-    
-    animate();
-    
-    return () => {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-      }
-    };
-  }, []);
-
+ 
   // Close mobile menu when clicking outside
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -90,7 +63,7 @@ export default function Navbar() {
     { name: "Gallery", path: "/gallery" },
   ];
 
-  const marqueeText = "• Admission open for 2025–26";
+  
 
   return (
     <div className="w-full sticky top-0 z-50">
@@ -233,19 +206,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Continuous Marquee */}
-        <div className="w-full bg-[#FFDF35] py-1 overflow-hidden">
-          <div 
-            ref={marqueeRef}
-            className="whitespace-nowrap text-black font-semibold flex text-sm md:text-base"
-          >
-            {Array(25).fill(marqueeText).map((item, index) => (
-              <span key={index} className="inline-block mr-8">
-                {item}
-              </span>
-            ))}
-          </div>
-        </div>
+        
       </div>
     </div>
   );

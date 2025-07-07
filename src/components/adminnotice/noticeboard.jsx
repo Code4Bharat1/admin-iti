@@ -3,43 +3,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import {
-  FaUserCircle,
-  FaTachometerAlt,
-  FaImages,
-  FaVideo,
-  FaClipboard,
-  FaBlog,
-  FaMedal,
-  FaSignOutAlt,
-} from "react-icons/fa";
 
 export default function NoticeBoard() {
   const router = useRouter();
 
   const [notice, setNotice] = useState("Enter your notice here");
-  const [activities, setActivities] = useState([
-    {
-      id: 1,
-      user: "admin1@.com",
-      description: 'Added a new notice: "Final Exam Timetable"',
-      date: "19 June 2025",
-    },
-    {
-      id: 2,
-      user: "admin2@.com",
-      description: 'Deleted the notice: "Old Timetable Notice"',
-      date: "15 June 2025",
-    },
-    {
-      id: 3,
-      user: "admin3@.com",
-      description: 'Updated the notice: "Library Closed on Friday”',
-      date: "12 June 2025",
-    },
-  ]);
-
+  const [activities, setActivities] = useState([]);
   const [editingActivity, setEditingActivity] = useState(null);
+
 
   useEffect(() => {
     fetchNotices();
@@ -47,7 +18,7 @@ export default function NoticeBoard() {
 
   const fetchNotices = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/admin/notices');
+      const res = await axios.get("http://localhost:5000/api/admin/notices");
       setActivities(res.data);
     } catch (err) {
       console.error("Failed to fetch notices:", err);
@@ -67,7 +38,7 @@ export default function NoticeBoard() {
         },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // assuming token is stored here
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
@@ -107,7 +78,7 @@ export default function NoticeBoard() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http:localhost:5000/api/admin/notice/${id}`, {
+      await axios.delete(`http://localhost:5000/api/admin/notice/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -119,70 +90,25 @@ export default function NoticeBoard() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/login"); // update the path if your login route is different
+  };
+
   return (
     <div className="flex min-h-screen font-[poppins]">
-      {/* Sidebar */}
-      <div className="w-60 h-screen bg-[#1B264F] text-white flex flex-col items-center py-4 space-y-6">
-        <div className="flex flex-col items-center mt-20 space-y-1">
-          <FaUserCircle className="text-5xl text-black bg-white rounded-full p-1" />
-          <span className="text-lg text-[#FFDF35]">abc@gmail.com</span>
-        </div>
-
-        <div className="w-full px-4 space-y-4 mt-4 text-sm">
-          <div
-            onClick={() => router.push("/dashboard")}
-            className="flex items-center space-x-2 bg-gray-200 text-black px-2 py-1 rounded cursor-pointer"
-          >
-            <FaTachometerAlt />
-            <span>Dashboard</span>
-          </div>
-          <div
-            onClick={() => router.push("/gallery")}
-            className="flex items-center space-x-2 cursor-pointer"
-          >
-            <FaImages />
-            <span>Gallery</span>
-          </div>
-          <div
-            onClick={() => router.push("/video-gallery")}
-            className="flex items-center space-x-2 cursor-pointer"
-          >
-            <FaVideo />
-            <span>Video Gallery</span>
-          </div>
-          <div
-            onClick={() => router.push("/notice-board")}
-            className="flex items-center space-x-2 cursor-pointer"
-          >
-            <FaClipboard />
-            <span>Notice board</span>
-          </div>
-          <div
-            onClick={() => router.push("/blogs")}
-            className="flex items-center space-x-2 cursor-pointer"
-          >
-            <FaBlog />
-            <span>Blogs</span>
-          </div>
-          <div
-            onClick={() => router.push("/topper-list")}
-            className="flex items-center space-x-2 cursor-pointer"
-          >
-            <FaMedal />
-            <span>Topper List</span>
-          </div>
-          <div
-            onClick={() => router.push("/logout")}
-            className="flex items-center space-x-2 cursor-pointer"
-          >
-            <FaSignOutAlt />
-            <span>Logout</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
       <div className="flex-1 bg-[#EDF4FF] p-10 relative">
+
+        {/* Top Right Logout Button */}
+        <div className="absolute top-4 right-4">
+          <button
+            onClick={() => setShowLogoutModal(true)}
+            className="text-red-600 border border-red-600 px-4 py-2 rounded hover:bg-red-600 hover:text-white transition"
+          >
+            Logout
+          </button>
+        </div>
+
         <h1 className="text-3xl font-bold text-[#1F2A44] mb-6">Notice board</h1>
 
         {/* Add New Notice */}
@@ -209,7 +135,9 @@ export default function NoticeBoard() {
         </div>
 
         {/* Recent Activity Table */}
-        <h2 className="text-xl font-semibold text-[#1F2A44] mb-4">Recent Activity</h2>
+        <h2 className="text-xl font-semibold text-[#1F2A44] mb-4">
+          Recent Activity
+        </h2>
         <div className="overflow-x-auto max-w-5xl">
           <table className="min-w-full text-sm text-left border border-gray-300">
             <thead className="bg-[#1B264F] text-white">
@@ -222,20 +150,20 @@ export default function NoticeBoard() {
             </thead>
             <tbody className="bg-[#E4ECFD] text-gray-900">
               {activities.map((activity) => (
-                <tr key={activity.id} className="border-t border-gray-300">
+                <tr key={activity._id} className="border-t border-gray-300">
                   <td className="px-6 py-4">{activity.user}</td>
                   <td className="px-6 py-4">{activity.description}</td>
                   <td className="px-6 py-4">{activity.date}</td>
                   <td className="px-6 py-4 space-x-2">
                     <button
-                      onClick={() => handleEdit(activity.id)}
+                      onClick={() => setEditingActivity(activity)}
                       className="text-green-600 font-medium hover:underline"
                     >
                       Edit
                     </button>
                     |
                     <button
-                      onClick={() => handleDelete(activity.id)}
+                      onClick={() => handleDelete(activity._id)}
                       className="text-red-600 font-medium hover:underline"
                     >
                       Delete
@@ -251,40 +179,57 @@ export default function NoticeBoard() {
         {editingActivity && (
           <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 max-w-lg w-full shadow-lg">
-              <h2 className="text-xl font-bold mb-4 text-[#1F2C56]">Edit Notice</h2>
+              <h2 className="text-xl font-bold mb-4 text-[#1F2C56]">
+                Edit Notice
+              </h2>
 
               <div className="space-y-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">User</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    User
+                  </label>
                   <input
                     type="text"
                     value={editingActivity.user}
                     onChange={(e) =>
-                      setEditingActivity({ ...editingActivity, user: e.target.value })
+                      setEditingActivity({
+                        ...editingActivity,
+                        user: e.target.value,
+                      })
                     }
                     className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1F2C56] text-black"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Description</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Description
+                  </label>
                   <input
                     type="text"
                     value={editingActivity.description}
                     onChange={(e) =>
-                      setEditingActivity({ ...editingActivity, description: e.target.value })
+                      setEditingActivity({
+                        ...editingActivity,
+                        description: e.target.value,
+                      })
                     }
                     className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1F2C56] text-black"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Date</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Date
+                  </label>
                   <input
                     type="text"
                     value={editingActivity.date}
                     onChange={(e) =>
-                      setEditingActivity({ ...editingActivity, date: e.target.value })
+                      setEditingActivity({
+                        ...editingActivity,
+                        date: e.target.value,
+                      })
                     }
                     className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1F2C56] text-black"
                   />
@@ -308,7 +253,8 @@ export default function NoticeBoard() {
             </div>
           </div>
         )}
-      </div>
+
+    </div>
     </div>
   );
 }

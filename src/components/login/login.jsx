@@ -49,7 +49,7 @@ export default function Login() {
       {/* Right Side */}
       <div className="w-1/2 bg-white flex items-center justify-center">
         <div className="w-full max-w-lg px-6">
-          <h2 className="text-5xl font-bold mb-10 font-[Times_New_Roman] text-center">
+          <h2 className="text-5xl font-bold mb-10 font-[Times_New_Roman] text-black text-center">
             Welcome to MAF ITI
           </h2>
 
@@ -64,7 +64,7 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="Email ID"
-                className="w-full px-4 py-3 bg-[#F4F9FF] rounded-lg shadow-md focus:outline-none"
+                className="w-full px-4 py-3 bg-[#F4F9FF] rounded-lg shadow-md  text-black focus:outline-none"
               />
             </div>
 
@@ -78,7 +78,7 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 placeholder="Password"
-                className="w-full px-4 py-3 bg-[#F4F9FF] rounded-lg shadow-md focus:outline-none"
+                className="w-full px-4 py-3 bg-[#F4F9FF] rounded-lg shadow-md text-black focus:outline-none"
               />
             </div>
 
