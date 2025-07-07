@@ -9,27 +9,7 @@ export default function NoticeBoard() {
   const [token, setToken] = useState(null);
 
   const [notice, setNotice] = useState("Enter your notice here");
-  const [activities, setActivities] = useState([
-    {
-      id: 1,
-      user: "admin1@.com",
-      description: 'Added a new notice: "Final Exam Timetable"',
-      date: "19 June 2025",
-    },
-    {
-      id: 2,
-      user: "admin2@.com",
-      description: 'Deleted the notice: "Old Timetable Notice"',
-      date: "15 June 2025",
-    },
-    {
-      id: 3,
-      user: "admin3@.com",
-      description: 'Updated the notice: "Library Closed on Friday”',
-      date: "12 June 2025",
-    },
-  ]);
-
+  const [activities, setActivities] = useState([]);
   const [editingActivity, setEditingActivity] = useState(null);
 
   useEffect(() => {
@@ -42,7 +22,6 @@ export default function NoticeBoard() {
       }
     }
   }, []);
-
 
   useEffect(() => {
     const fetchNotices = async () => {
@@ -63,23 +42,23 @@ export default function NoticeBoard() {
     }
   }, [token]);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!notice.trim()) return;
 
     try {
-      const res = await axios.post("http://localhost:5000/api/admin/notices", {
-        description: notice,
-        date: new Date().toISOString(), // ISO format to allow backend to parse
-      },
+      const res = await axios.post(
+        "http://localhost:5000/api/admin/notices",
+        {
+          description: notice,
+          date: new Date().toISOString(),
+        },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // assuming token is stored here
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-
       setActivities((prev) => [res.data, ...prev]);
       setNotice("");
     } catch (err) {
@@ -94,11 +73,10 @@ export default function NoticeBoard() {
     }
   };
 
-
   const handleSaveEdit = async () => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/admin/notices/${editingActivity._id}`, // use _id
+        `http://localhost:5000/api/admin/notices/${editingActivity._id}`,
         {
           description: editingActivity.description,
           date: new Date(editingActivity.date).toISOString(),
@@ -110,7 +88,9 @@ export default function NoticeBoard() {
         }
       );
       setActivities((prev) =>
-        prev.map((item) => (item._id === editingActivity._id ? res.data : item))
+        prev.map((item) =>
+          item._id === editingActivity._id ? res.data : item
+        )
       );
       setEditingActivity(null);
     } catch (err) {
@@ -118,10 +98,9 @@ export default function NoticeBoard() {
     }
   };
 
-
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http:localhost:5000/api/admin/notice/${id}`, {
+      await axios.delete(`http://localhost:5000/api/admin/notice/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -135,17 +114,6 @@ export default function NoticeBoard() {
   return (
     <div className="flex min-h-screen font-[poppins]">
       <div className="flex-1 bg-[#EDF4FF] p-10 relative">
-
-        {/* Top Right Logout Button */}
-        <div className="absolute top-4 right-4">
-          <button
-            onClick={() => setShowLogoutModal(true)}
-            className="text-red-600 border border-red-600 px-4 py-2 rounded hover:bg-red-600 hover:text-white transition"
-          >
-            Logout
-          </button>
-        </div>
-
         <h1 className="text-3xl font-bold text-[#1F2A44] mb-6">Notice board</h1>
 
         {/* Add New Notice */}
@@ -193,7 +161,7 @@ export default function NoticeBoard() {
                   <td className="px-6 py-4">{activity.date}</td>
                   <td className="px-6 py-4 space-x-2">
                     <button
-                      onClick={() => handleEdit(activity.id)}
+                      onClick={() => handleEdit(activity._id)}
                       className="text-green-600 font-medium hover:underline"
                     >
                       Edit
@@ -214,75 +182,52 @@ export default function NoticeBoard() {
 
         {/* Edit Modal */}
         {editingActivity && (
-          <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-lg w-full shadow-lg">
-              <h2 className="text-xl font-bold mb-4 text-[#1F2C56]">
-                Edit Notice
-              </h2>
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/30 backdrop-blur-sm">
+            <div className="bg-white rounded-lg p-6 w-full max-w-xl">
+              <h2 className="text-2xl font-bold text-[#1F2C56] mb-6">Edit Notice</h2>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    User
-                  </label>
+                  <label className="block text-sm font-semibold text-gray-700">User</label>
                   <input
                     type="text"
                     value={editingActivity.user}
-                    onChange={(e) =>
-                      setEditingActivity({
-                        ...editingActivity,
-                        user: e.target.value,
-                      })
-                    }
+                    onChange={(e) => setEditingActivity({ ...editingActivity, user: e.target.value })}
                     className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1F2C56] text-black"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Description
-                  </label>
+                  <label className="block text-sm font-semibold text-gray-700">Description</label>
                   <input
                     type="text"
                     value={editingActivity.description}
-                    onChange={(e) =>
-                      setEditingActivity({
-                        ...editingActivity,
-                        description: e.target.value,
-                      })
-                    }
+                    onChange={(e) => setEditingActivity({ ...editingActivity, description: e.target.value })}
                     className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1F2C56] text-black"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Date
-                  </label>
+                  <label className="block text-sm font-semibold text-gray-700">Date</label>
                   <input
                     type="text"
                     value={editingActivity.date}
-                    onChange={(e) =>
-                      setEditingActivity({
-                        ...editingActivity,
-                        date: e.target.value,
-                      })
-                    }
+                    onChange={(e) => setEditingActivity({ ...editingActivity, date: e.target.value })}
                     className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1F2C56] text-black"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end mt-6 space-x-3">
+              <div className="flex justify-end mt-6 space-x-4">
                 <button
                   onClick={() => setEditingActivity(null)}
-                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition"
+                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSaveEdit}
-                  className="bg-[#1B264F] text-white px-4 py-2 rounded hover:bg-[#162143] transition"
+                  className="bg-[#1B264F] text-white px-4 py-2 rounded hover:bg-[#162143]"
                 >
                   Save
                 </button>
@@ -290,8 +235,7 @@ export default function NoticeBoard() {
             </div>
           </div>
         )}
-
-    </div>
+      </div>
     </div>
   );
 }

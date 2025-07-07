@@ -57,9 +57,6 @@ export default function Dashboard() {
 
   return (
     <div className="flex min-h-screen font-poppins">
-      {/* Sidebar */}
-      
-
       {/* Dashboard Content */}
       <div className="bg-[#F4F8FC] flex-1 p-10">
         <h1 className="text-4xl font-extrabold text-[#1F2C56] mb-12">Dashboard</h1>
@@ -76,26 +73,24 @@ export default function Dashboard() {
           ))}
         </div>
 
-        
-
         <h2 className="text-4xl font-extrabold text-[#1F2C56] mb-6">Recent Activity</h2>
 
         <div className="overflow-x-auto max-w-8xl mx-auto">
           <table className="w-full text-base text-left rounded-xl overflow-hidden shadow-md">
             <thead className="bg-[#1F2C56] text-white text-lg">
               <tr>
-                <th className="py-2 px-4 font-semibold">User</th>
-                <th className="py-2 px-4 font-semibold">Action</th>
-                <th className="py-2 px-4 font-semibold">Section</th>
+                <th className="py-2 px-4 font-semibold border-r border-white">User</th>
+                <th className="py-2 px-4 font-semibold border-r border-white">Action</th>
+                <th className="py-2 px-4 font-semibold border-r border-white">Section</th>
                 <th className="py-2 px-4 font-semibold">Date & Time</th>
               </tr>
             </thead>
             <tbody className="bg-[#C9D4EC] text-[#1F2C56] text-base">
               {activities.map((activity, idx) => (
                 <tr key={idx} className="border-t border-gray-300">
-                  <td className="py-2 px-4">{activity.user}</td>
-                  <td className="py-2 px-4">{activity.action}</td>
-                  <td className="py-2 px-4">{activity.section}</td>
+                  <td className="py-2 px-4 border-r border-gray-400">{activity.user}</td>
+                  <td className="py-2 px-4 border-r border-gray-400">{activity.action}</td>
+                  <td className="py-2 px-4 border-r border-gray-400">{activity.section}</td>
                   <td className="py-2 px-4">{activity.dateTime}</td>
                 </tr>
               ))}
