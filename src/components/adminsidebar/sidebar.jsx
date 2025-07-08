@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, usePathname } from 'next/navigation';
-
+import { useState } from 'react';
 import {
   FaUserCircle,
   FaTachometerAlt,
@@ -16,6 +16,7 @@ import {
 export default function AdminSidebar() {
   const router = useRouter();
   const pathname = usePathname();
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const isActive = (path) => pathname.startsWith(path);
 
@@ -24,19 +25,36 @@ export default function AdminSidebar() {
   const activeStyle = 'bg-yellow-300 text-black font-semibold';
   const inactiveStyle = 'text-white hover:bg-white/10';
 
+  const handleLogoutClick = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const confirmLogout = () => {
+    setShowLogoutConfirm(false);
+    router.push('/login');
+  };
+
+  const cancelLogout = () => {
+    setShowLogoutConfirm(false);
+  };
+
   return (
-    <div className="w-60 h-screen bg-[#1B264F] text-white flex flex-col items-center py-4 font-[poppins]">
+    <div className="w-60 h-screen bg-[#1B264F] text-white flex flex-col items-center py-4 font-[poppins] relative">
       {/* Profile */}
       <div className="flex flex-col items-center mt-10 space-y-2">
         <FaUserCircle className="text-5xl text-black bg-white rounded-full p-1" />
-        <span className="text-sm text-[#FFDF35] text-center break-words">Ayaanraje25@gmail.com</span>
+        <span className="text-sm text-[#FFDF35] text-center break-words">
+          Ayaanraje25@gmail.com
+        </span>
       </div>
 
       {/* Navigation */}
       <div className="w-full mt-10 flex flex-col items-center space-y-1">
         <div
           onClick={() => router.push('/admindashboard')}
-          className={`${baseLinkStyle} ${isActive('/admindashboard') ? activeStyle : inactiveStyle}`}
+          className={`${baseLinkStyle} ${
+            isActive('/admindashboard') ? activeStyle : inactiveStyle
+          }`}
         >
           <FaTachometerAlt className="text-lg" />
           <span className="text-sm">Dashboard</span>
@@ -44,7 +62,9 @@ export default function AdminSidebar() {
 
         <div
           onClick={() => router.push('/admingallery')}
-          className={`${baseLinkStyle} ${isActive('/admingallery') ? activeStyle : inactiveStyle}`}
+          className={`${baseLinkStyle} ${
+            isActive('/admingallery') ? activeStyle : inactiveStyle
+          }`}
         >
           <FaImages className="text-lg" />
           <span className="text-sm">Gallery</span>
@@ -52,7 +72,9 @@ export default function AdminSidebar() {
 
         <div
           onClick={() => router.push('/adminvideo')}
-          className={`${baseLinkStyle} ${isActive('/adminvideo') ? activeStyle : inactiveStyle}`}
+          className={`${baseLinkStyle} ${
+            isActive('/adminvideo') ? activeStyle : inactiveStyle
+          }`}
         >
           <FaVideo className="text-lg" />
           <span className="text-sm">Videos</span>
@@ -60,7 +82,9 @@ export default function AdminSidebar() {
 
         <div
           onClick={() => router.push('/adminnotice')}
-          className={`${baseLinkStyle} ${isActive('/adminnotice') ? activeStyle : inactiveStyle}`}
+          className={`${baseLinkStyle} ${
+            isActive('/adminnotice') ? activeStyle : inactiveStyle
+          }`}
         >
           <FaClipboard className="text-lg" />
           <span className="text-sm">Notice</span>
@@ -68,7 +92,9 @@ export default function AdminSidebar() {
 
         <div
           onClick={() => router.push('/adminBlog')}
-          className={`${baseLinkStyle} ${isActive('/adminBlog') ? activeStyle : inactiveStyle}`}
+          className={`${baseLinkStyle} ${
+            isActive('/adminBlog') ? activeStyle : inactiveStyle
+          }`}
         >
           <FaBlog className="text-lg" />
           <span className="text-sm">Blogs</span>
@@ -76,20 +102,49 @@ export default function AdminSidebar() {
 
         <div
           onClick={() => router.push('/admintopper')}
-          className={`${baseLinkStyle} ${isActive('/admintopper') ? activeStyle : inactiveStyle}`}
+          className={`${baseLinkStyle} ${
+            isActive('/admintopper') ? activeStyle : inactiveStyle
+          }`}
         >
           <FaMedal className="text-lg" />
           <span className="text-sm">Toppers</span>
         </div>
 
         <div
-          onClick={() => router.push('/login')}
-          className={`${baseLinkStyle} ${isActive('/logout') ? activeStyle : inactiveStyle}`}
+          onClick={handleLogoutClick}
+          className={`${baseLinkStyle} ${
+            isActive('/logout') ? activeStyle : inactiveStyle
+          }`}
         >
           <FaSignOutAlt className="text-lg" />
           <span className="text-sm text-red-500">Logout</span>
         </div>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 backdrop-blur-md bg-white/30 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-80 text-center">
+            <p className="text-lg font-semibold text-gray-800 mb-4">
+              Are you sure you want to logout?
+            </p>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={confirmLogout}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >
+                Yes
+              </button>
+              <button
+                onClick={cancelLogout}
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
