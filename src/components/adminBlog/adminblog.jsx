@@ -112,11 +112,6 @@ export default function BlogPage() {
 
   return (
     <div className="bg-[#f0f8ff] px-6 py-6 min-h-screen font-[poppins] relative">
-      {/* Top Right Email */}
-      <div className="absolute top-4 right-6 flex items-center space-x-2 text-black">
-        <span>abc@gmail.com</span>
-        <FaUserCircle className="text-2xl" />
-      </div>
 
       {/* Add New Blog */}
       <div className="w-full max-w-3xl ml-6">

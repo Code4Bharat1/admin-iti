@@ -107,11 +107,6 @@ export default function Gallery() {
     <div className="flex min-h-screen font-poppins">
           {/* Main Content */}
       <div className="flex-1 bg-[#F4F8FC] px-8 py-6 overflow-auto">
-        {/* Top Right Email */}
-        <div className="flex justify-end items-center gap-2 mb-4 text-[#1F2C56]">
-          <span className="text-sm">abc@gmail.com</span>
-      
-        </div>
 
         {/* Header */}
         <h1 className="text-4xl font-extrabold text-[#1F2A44] mb-2">Gallery</h1>

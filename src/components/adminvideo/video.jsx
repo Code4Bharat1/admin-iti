@@ -97,11 +97,6 @@ export default function VideoGallery() {
     <div className="flex min-h-screen">
       {/* Main Content */}
       <div className="flex-1 bg-blue-50 p-6 relative">
-        {/* Top Bar */}
-        <div className="absolute top-4 right-6 text-sm text-gray-800 flex items-center gap-4">
-          <span>abc@gmail.com</span>
-      
-        </div>
 
         {/* Heading */}
         <h2 className="text-4xl font-extrabold text-gray-800 mb-2">

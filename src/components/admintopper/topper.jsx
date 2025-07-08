@@ -127,10 +127,6 @@ export default function TopperList() {
 
   return (
     <div className="bg-[#f3f8ff] p-6 min-h-screen font-[poppins] relative">
-      {/* Top Right Email */}
-      <div className="absolute top-4 right-6 text-sm text-gray-800 flex items-center gap-2">
-        abc@gmail.com <span className="text-xl">👤</span>
-      </div>
 
       <h2 className="text-4xl font-extrabold text-[#1F2A44] mb-6">
         Edit Topper List
