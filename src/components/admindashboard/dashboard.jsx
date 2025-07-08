@@ -1,62 +1,59 @@
 "use client";
-import React from 'react';
-import { useRouter } from "next/navigation";
-import {
-  FaUserCircle,
-  FaTachometerAlt,
-  FaImages,
-  FaVideo,
-  FaClipboard,
-  FaBlog,
-  FaMedal,
-  FaSignOutAlt
-} from "react-icons/fa";
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 
 export default function Dashboard() {
-  const router = useRouter();
+  const [activities, setActivities] = useState([]);
+  const [stats, setStats] = useState([]);
 
-  const stats = [
-    { label: 'Notices', count: 3 },
-    { label: 'Photos', count: 18 },
-    { label: 'Videos', count: 4 },
-    { label: 'Blogs', count: 3 },
-  ];
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const config = {
+          headers: { Authorization: `Bearer ${token}` },
+        };
 
-  const activities = [
-    {
-      user: 'john.doe@example.com',
-      action: 'Edited Blog Post',
-      section: 'Blogs',
-      dateTime: '19 June 2025, 10:45 AM',
-    },
-    {
-      user: 'jane.smith@example.com',
-      action: 'Added New Notice',
-      section: 'Notice Board',
-      dateTime: '15 June 2025, 11:29 AM',
-    },
-    {
-      user: 'michael.brown@example.com',
-      action: 'Deleted Image',
-      section: 'Gallery',
-      dateTime: '12 June 2025, 08:22 PM',
-    },
-    {
-      user: 'emily.wilson@example.com',
-      action: 'Updated Topper List',
-      section: 'Topper List',
-      dateTime: '11 June 2025, 09:15 AM',
-    },
-    {
-      user: 'david.lee@example.com',
-      action: 'Added Video',
-      section: 'Video Gallery',
-      dateTime: '05 June 2025, 07:55 PM',
-    },
-  ];
-     
-  
- return (
+        // Fetch counts
+        const [blogsRes, imagesRes, noticesRes] = await Promise.all([
+          axios.get('http://localhost:5000/api/admin/blogs', config),
+          axios.get('http://localhost:5000/api/admin/media/images', config),
+          axios.get('http://localhost:5000/api/admin/notices', config),
+        ]);
+
+        const newStats = [
+          { label: 'Notices', count: noticesRes.data.length },
+          { label: 'Photos', count: imagesRes.data.length },
+          { label: 'Blogs', count: blogsRes.data.length },
+        ];
+        setStats(newStats);
+
+        // Fetch recent activities
+        const activitiesRes = await axios.get('http://localhost:5000/api/admin/activities', config);
+
+        // Format date before setting state (optional enhancement)
+        const formattedActivities = activitiesRes.data.map((activity) => ({
+          ...activity,
+          dateTime: new Date(activity.dateTime).toLocaleString('en-GB', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
+        }));
+
+        setActivities(formattedActivities);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+
+  return (
     <div className="flex min-h-screen font-poppins">
       {/* Dashboard Content */}
       <div className="bg-[#F4F8FC] flex-1 p-10">
