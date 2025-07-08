@@ -12,6 +12,7 @@ import {
   FaMedal,
   FaSignOutAlt,
 } from 'react-icons/fa';
+import axios from 'axios';
 
 
 export default function AdminSidebar() {
@@ -30,10 +31,24 @@ export default function AdminSidebar() {
     setShowLogoutConfirm(true);
   };
 
-  const confirmLogout = () => {
-    setShowLogoutConfirm(false);
-    router.push('/login');
+  const confirmLogout = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+
+      await axios.post('http://localhost:5000/api/admin/auth/logout', {}, config);
+
+      localStorage.removeItem('token'); // Remove stored auth token
+      setShowLogoutConfirm(false);
+      router.push('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      alert('Logout failed. Please try again.');
+    }
   };
+
 
   const cancelLogout = () => {
     setShowLogoutConfirm(false);
@@ -53,9 +68,8 @@ export default function AdminSidebar() {
       <div className="w-full mt-10 flex flex-col items-center space-y-1">
         <div
           onClick={() => router.push('/admindashboard')}
-          className={`${baseLinkStyle} ${
-            isActive('/admindashboard') ? activeStyle : inactiveStyle
-          }`}
+          className={`${baseLinkStyle} ${isActive('/admindashboard') ? activeStyle : inactiveStyle
+            }`}
         >
           <FaTachometerAlt className="text-lg" />
           <span className="text-sm">Dashboard</span>
@@ -63,9 +77,8 @@ export default function AdminSidebar() {
 
         <div
           onClick={() => router.push('/admingallery')}
-          className={`${baseLinkStyle} ${
-            isActive('/admingallery') ? activeStyle : inactiveStyle
-          }`}
+          className={`${baseLinkStyle} ${isActive('/admingallery') ? activeStyle : inactiveStyle
+            }`}
         >
           <FaImages className="text-lg" />
           <span className="text-sm">Gallery</span>
@@ -73,9 +86,8 @@ export default function AdminSidebar() {
 
         <div
           onClick={() => router.push('/adminvideo')}
-          className={`${baseLinkStyle} ${
-            isActive('/adminvideo') ? activeStyle : inactiveStyle
-          }`}
+          className={`${baseLinkStyle} ${isActive('/adminvideo') ? activeStyle : inactiveStyle
+            }`}
         >
           <FaVideo className="text-lg" />
           <span className="text-sm">Videos</span>
@@ -83,9 +95,8 @@ export default function AdminSidebar() {
 
         <div
           onClick={() => router.push('/adminnotice')}
-          className={`${baseLinkStyle} ${
-            isActive('/adminnotice') ? activeStyle : inactiveStyle
-          }`}
+          className={`${baseLinkStyle} ${isActive('/adminnotice') ? activeStyle : inactiveStyle
+            }`}
         >
           <FaClipboard className="text-lg" />
           <span className="text-sm">Notice</span>
@@ -93,9 +104,8 @@ export default function AdminSidebar() {
 
         <div
           onClick={() => router.push('/adminBlog')}
-          className={`${baseLinkStyle} ${
-            isActive('/adminBlog') ? activeStyle : inactiveStyle
-          }`}
+          className={`${baseLinkStyle} ${isActive('/adminBlog') ? activeStyle : inactiveStyle
+            }`}
         >
           <FaBlog className="text-lg" />
           <span className="text-sm">Blogs</span>
@@ -103,9 +113,8 @@ export default function AdminSidebar() {
 
         <div
           onClick={() => router.push('/admintopper')}
-          className={`${baseLinkStyle} ${
-            isActive('/admintopper') ? activeStyle : inactiveStyle
-          }`}
+          className={`${baseLinkStyle} ${isActive('/admintopper') ? activeStyle : inactiveStyle
+            }`}
         >
           <FaMedal className="text-lg" />
           <span className="text-sm">Toppers</span>
@@ -113,9 +122,8 @@ export default function AdminSidebar() {
 
         <div
           onClick={handleLogoutClick}
-          className={`${baseLinkStyle} ${
-            isActive('/logout') ? activeStyle : inactiveStyle
-          }`}
+          className={`${baseLinkStyle} ${isActive('/logout') ? activeStyle : inactiveStyle
+            }`}
         >
           <FaSignOutAlt className="text-lg" />
           <span className="text-sm text-red-500">Logout</span>
