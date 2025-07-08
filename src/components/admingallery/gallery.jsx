@@ -105,46 +105,7 @@ export default function Gallery() {
 
   return (
     <div className="flex min-h-screen font-poppins">
-      {/* Sidebar */}
-      <div className="w-72 min-h-screen bg-[#1B264F] text-white flex flex-col items-center py-4 space-y-6 pb-20">
-        <div className="flex flex-col items-center mt-20 space-y-1">
-          <FaUserCircle className="text-5xl text-black bg-white rounded-full p-1" />
-          <span className="text-lg text-[#FFDF35]">abc@gmail.com</span>
-        </div>
-
-        <div className="w-full px-4 space-y-4 mt-4 text-sm">
-          <div onClick={() => router.push('/dashboard')} className="flex items-center space-x-2 bg-gray-200 text-black px-2 py-1 rounded cursor-pointer">
-            <FaTachometerAlt />
-            <span>Dashboard</span>
-          </div>
-          <div onClick={() => router.push('/gallery')} className="flex items-center space-x-2 cursor-pointer">
-            <FaImages />
-            <span>Gallery</span>
-          </div>
-          <div onClick={() => router.push('/video-gallery')} className="flex items-center space-x-2 cursor-pointer">
-            <FaVideo />
-            <span>Video Gallery</span>
-          </div>
-          <div onClick={() => router.push('/notice-board')} className="flex items-center space-x-2 cursor-pointer">
-            <FaClipboard />
-            <span>Notice board</span>
-          </div>
-          <div onClick={() => router.push('/blogs')} className="flex items-center space-x-2 cursor-pointer">
-            <FaBlog />
-            <span>Blogs</span>
-          </div>
-          <div onClick={() => router.push('/topper-list')} className="flex items-center space-x-2 cursor-pointer">
-            <FaMedal />
-            <span>Topper List</span>
-          </div>
-          <div onClick={() => router.push('/logout')} className="flex items-center space-x-2 cursor-pointer">
-            <FaSignOutAlt />
-            <span>Logout</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
+          {/* Main Content */}
       <div className="flex-1 bg-[#F4F8FC] px-8 py-6 overflow-auto">
         {/* Top Right Email */}
         <div className="flex justify-end items-center gap-2 mb-4 text-[#1F2C56]">
@@ -214,7 +175,7 @@ export default function Gallery() {
         </div>
         <button
           onClick={() => handleDelete(photo._id)} // Use ID not index!
-          className="mt-2 text-red-600 text-sm font-semibold"
+          className="mt-2 text-red-600 text-sm font-semibold cursor-pointer"
         >
           Delete
         </button>

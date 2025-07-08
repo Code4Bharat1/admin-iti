@@ -1,4 +1,4 @@
-import BlogList from '@/componentss/coursess/blog/heroblog'
+import BlogList from '@/components/coursess/blog/heroblog'
 import React from 'react'
 
 export default function page() {

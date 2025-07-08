@@ -1,38 +1,26 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { useEffect } from "react";
-
-import {
-  FaUserCircle,
-  FaTachometerAlt,
-  FaImages,
-  FaVideo,
-  FaClipboard,
-  FaBlog,
-  FaMedal,
-  FaSignOutAlt,
-  FaTrash,
-} from "react-icons/fa";
+import { FaTrash, FaSignOutAlt } from "react-icons/fa";
 
 export default function VideoGallery() {
   const router = useRouter();
   const fileInputRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [videos, setVideos] = useState([]);
-  const [token, setToken] = useState("null");
+  const [token, setToken] = useState(null);
+  const [showLogoutModal, setShowLogoutModal] = useState(false); // NEW STATE
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setToken[token];
-  });
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken);
+  }, []);
 
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const token=localStorage.getItem("token")
         const res = await axios.get(
           "http://localhost:5000/api/admin/media/videos",
           {
@@ -40,27 +28,31 @@ export default function VideoGallery() {
               Authorization: `Bearer ${token}`,
             },
           }
-        ); // Make sure this is the correct backend route
+        );
         setVideos(res.data);
       } catch (err) {
         console.error("Failed to fetch videos:", err);
       }
     };
 
-    fetchVideos();
+    if (token) fetchVideos();
   }, [token]);
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
   };
 
+  const handleClearFile = () => {
+    setSelectedFile(null);
+    fileInputRef.current.value = "";
+  };
+
   const handleDelete = async (id) => {
     try {
-      const token=localStorage.getItem("token")
-      await axios.delete(`http://localhost:5000/api/admin/media/videos/${id}`,{
-        headers:{
-          Authorization:`Bearer ${token}`
-        }
+      await axios.delete(`http://localhost:5000/api/admin/media/videos/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       setVideos(videos.filter((v) => v._id !== id));
     } catch (err) {
@@ -72,24 +64,21 @@ export default function VideoGallery() {
     e.preventDefault();
     if (selectedFile) {
       try {
-        const token=localStorage.getItem("token")
-     const formData = new FormData();
-formData.append("video", selectedFile); // 'video' must match multer field
+        const formData = new FormData();
+        formData.append("video", selectedFile);
 
-const res = await axios.post(
-  "http://localhost:5000/api/admin/media/videos",
-  formData,
-  {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'multipart/form-data',
-    },
-    withCredentials: true,
-  }
-);
+        const res = await axios.post(
+          "http://localhost:5000/api/admin/media/videos",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+            withCredentials: true,
+          }
+        );
 
-
-        // Add the new video to your state
         setVideos([...videos, res.data]);
         setSelectedFile(null);
         fileInputRef.current.value = "";
@@ -99,14 +88,19 @@ const res = await axios.post(
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/login");
+  };
+
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar */}
-
       {/* Main Content */}
       <div className="flex-1 bg-blue-50 p-6 relative">
-        <div className="absolute top-4 right-6 text-sm text-gray-800 flex items-center gap-2">
-          abc@gmail.com <span className="text-xl">👤</span>
+        {/* Top Bar */}
+        <div className="absolute top-4 right-6 text-sm text-gray-800 flex items-center gap-4">
+          <span>abc@gmail.com</span>
+      
         </div>
 
         {/* Heading */}
@@ -116,14 +110,12 @@ const res = await axios.post(
 
         {/* Upload Section */}
         <form onSubmit={handleSubmit} className="mb-6">
-          {/* Label */}
           <label className="text-[#1B264F] font-extrabold text-[16px] block mb-2 text-lg">
             Add New Video
           </label>
 
-          {/* File input + Submit in one row */}
           <div className="flex items-center gap-4 flex-wrap">
-            {/* Upload Box */}
+            {/* File Picker */}
             <div className="flex items-center border border-gray-400 bg-[#E5E5E5] rounded px-2 py-1">
               <label className="bg-white text-black text-sm px-4 py-2 cursor-pointer rounded">
                 Choose File
@@ -138,11 +130,10 @@ const res = await axios.post(
                 {selectedFile ? selectedFile.name : "No File chosen"}
               </div>
 
-              {/* Trash Icon */}
               {selectedFile && (
                 <button
                   type="button"
-                  onClick={handleDelete}
+                  onClick={handleClearFile}
                   title="Clear file"
                   className="text-black text-lg ml-2 hover:text-red-600"
                 >
@@ -151,7 +142,6 @@ const res = await axios.post(
               )}
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               className="bg-[#1B264F] text-white px-6 py-2 rounded-md font-semibold text-sm hover:bg-blue-800"
@@ -162,23 +152,34 @@ const res = await axios.post(
         </form>
 
         {/* Video Gallery */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {videos.map((video) => (
-            <div key={video._id} className="flex flex-col items-center">
-              <video
-                src={video.videoUrl} // <- this must match your DB schema!
-                controls
-                className="w-full rounded border border-gray-300"
-              />
-              <button
-                onClick={() => handleDelete(video._id)}
-                className="text-red-600 mt-2 hover:underline"
-              >
-                Delete
-              </button>
-            </div>
-          ))}
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+{videos.map((video) => (
+  <div key={video._id} className="flex flex-col items-center gap-2">
+    <div className="w-full rounded overflow-hidden shadow border border-gray-300">
+      <video
+        src={`http://localhost:5000${video.videoUrl}`} // ✅ Ensure full path
+        controls
+        className="w-full h-64 sm:h-72 md:h-80 lg:h-96 object-contain bg-black"
+        onClick={(e) => {
+          if (e.target.readyState >= 2) {
+            e.target.play(); // ✅ Only play if video is loaded
+          }
+        }}
+      />
+    </div>
+    <button
+      onClick={() => handleDelete(video._id)}
+      className="text-red-600 text-sm font-semibold hover:underline cursor-pointer"
+      title="Delete video"
+    >
+      Delete
+    </button>
+  </div>
+))}
+
+</div>
+
+
       </div>
     </div>
   );

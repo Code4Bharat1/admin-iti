@@ -29,7 +29,7 @@ export default function AdminSidebar() {
       {/* Profile */}
       <div className="flex flex-col items-center mt-10 space-y-2">
         <FaUserCircle className="text-5xl text-black bg-white rounded-full p-1" />
-        <span className="text-sm text-[#FFDF35] text-center break-words">abc@gmail.com</span>
+        <span className="text-sm text-[#FFDF35] text-center break-words">Ayaanraje25@gmail.com</span>
       </div>
 
       {/* Navigation */}
