@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 import {
   FaUserCircle,
@@ -12,21 +12,14 @@ import {
   FaSignOutAlt
 } from "react-icons/fa";
 import CountUp from 'react-countup';
+import axios from 'axios';
 
 export default function Dashboard() {
   const router = useRouter();
   const speedFactor = 12;
   const minDuration = 2; // 👈 ensures even small numbers animate smoothly
-
-
-  const stats = [
-    { label: 'Notices', count: 3 },
-    { label: 'Photos', count: 18 },
-    { label: 'Videos', count: 4 },
-    { label: 'Blogs', count: 3 },
-  ];
-
-  const activities = [
+  const [stats, setStats] = useState([]);
+  const [activities, setActivities] = useState([  // <-- FIXED
     {
       user: 'john.doe@example.com',
       action: 'Edited Blog Post',
@@ -57,7 +50,43 @@ export default function Dashboard() {
       section: 'Video Gallery',
       dateTime: '05 June 2025, 07:55 PM',
     },
-  ];
+  ]);
+
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const token = localStorage.getItem('token'); // ⬅️ get token
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`, // ⬅️ add token to header
+          },
+        };
+
+        const [blogsRes, imagesRes, /* videosRes, */ noticesRes] = await Promise.all([
+          axios.get('http://localhost:5000/api/admin/blogs', config),
+          axios.get('http://localhost:5000/api/admin/images', config),
+          // axios.get('http://localhost:5000/api/admin/videos', config), // ⛔️ failing
+          axios.get('http://localhost:5000/api/admin/notices', config),
+        ]);
+
+        const newStats = [
+          { label: 'Notices', count: noticesRes.data.length },
+          { label: 'Photos', count: imagesRes.data.length },
+          { label: 'Videos', count: videosRes.data.length },
+          { label: 'Blogs', count: blogsRes.data.length },
+        ];
+
+        setStats(newStats);
+      } catch (error) {
+        console.error('Error fetching counts:', error);
+      }
+    };
+
+    fetchCounts();
+  }, []);
+
 
   return (
     <div className="flex min-h-screen font-poppins">
@@ -69,11 +98,8 @@ export default function Dashboard() {
         <h1 className="text-4xl font-extrabold text-[#1F2C56] mb-12">Dashboard</h1>
 
         <div className="flex flex-wrap gap-8 mb-16 justify-center">
-          {stats.map((item, index) => (
-            <div
-              key={index}
-              className="bg-[#FFDF35] text-center px-20 py-14 rounded-2xl shadow-lg w-[260px] h-[200px] flex flex-col justify-center items-center"
-            >
+          {newStats.map((item, index) => (
+            <div key={index} className="...">
               <p className="text-7xl font-extrabold text-[#1F2C56]">
                 <CountUp
                   end={item.count}
