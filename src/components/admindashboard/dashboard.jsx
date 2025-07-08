@@ -11,13 +11,9 @@ import {
   FaMedal,
   FaSignOutAlt
 } from "react-icons/fa";
-import CountUp from 'react-countup';
 
 export default function Dashboard() {
   const router = useRouter();
-  const speedFactor = 12;
-  const minDuration = 2; // 👈 ensures even small numbers animate smoothly
-
 
   const stats = [
     { label: 'Notices', count: 3 },
@@ -61,9 +57,6 @@ export default function Dashboard() {
 
   return (
     <div className="flex min-h-screen font-poppins">
-      {/* Sidebar */}
-      
-
       {/* Dashboard Content */}
       <div className="bg-[#F4F8FC] flex-1 p-10">
         <h1 className="text-4xl font-extrabold text-[#1F2C56] mb-12">Dashboard</h1>
@@ -74,19 +67,11 @@ export default function Dashboard() {
               key={index}
               className="bg-[#FFDF35] text-center px-20 py-14 rounded-2xl shadow-lg w-[260px] h-[200px] flex flex-col justify-center items-center"
             >
-              <p className="text-7xl font-extrabold text-[#1F2C56]">
-                <CountUp
-                  end={item.count}
-                  start={0}
-                  duration={Math.max(minDuration, item.count / speedFactor)}
-                />
-              </p>
+              <p className="text-7xl font-extrabold text-[#1F2C56]">{item.count}</p>
               <p className="text-[#1F2C56] font-semibold mt-4 text-2xl">{item.label}</p>
             </div>
           ))}
         </div>
-
-        
 
         <h2 className="text-4xl font-extrabold text-[#1F2C56] mb-6">Recent Activity</h2>
 
