@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   FaUserCircle,
   FaTachometerAlt,
@@ -19,8 +19,34 @@ export default function AdminSidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [admin, setAdmin] = useState(null);
 
   const isActive = (path) => pathname.startsWith(path);
+
+  useEffect(() => {
+    const fetchAdminDetails = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          router.push('/login');
+          return;
+        }
+
+        const config = {
+          headers: { Authorization: `Bearer ${token}` },
+        };
+
+        const res = await axios.get('http://localhost:5000/api/admin/auth/me', config);
+        setAdmin(res.data.admin);
+      } catch (error) {
+        console.error('Failed to fetch admin details:', error);
+        // Optionally redirect or show error
+      }
+    };
+
+    fetchAdminDetails();
+  }, []);
+
 
   const baseLinkStyle =
     'flex items-start justify-start gap-2 px-4 py-3 rounded-md cursor-pointer w-full transition-all duration-150';
@@ -40,7 +66,7 @@ export default function AdminSidebar() {
 
       await axios.post('http://localhost:5000/api/admin/auth/logout', {}, config);
 
-      localStorage.removeItem('token'); // Remove stored auth token
+      localStorage.removeItem('token');
       setShowLogoutConfirm(false);
       router.push('/login');
     } catch (error) {
@@ -60,7 +86,7 @@ export default function AdminSidebar() {
       <div className="flex flex-col items-center mt-10 space-y-2">
         <FaUserCircle className="text-5xl text-black bg-white rounded-full p-1" />
         <span className="text-sm text-[#FFDF35] text-center break-words">
-          Ayaanraje25@gmail.com
+          {admin ? admin.email : 'Loading...'}
         </span>
       </div>
 
