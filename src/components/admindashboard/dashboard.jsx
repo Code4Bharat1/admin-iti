@@ -65,7 +65,7 @@ export default function Dashboard() {
         const blogsRes = await axios.get('http://localhost:5000/api/admin/blogs', config);
 
         console.log("Fetching images...");
-        const imagesRes = await axios.get('http://localhost:5000/api/admin/images', config);
+        const imagesRes = await axios.get('http://localhost:5000/api/admin/media/images', config);
 
         console.log("Fetching notices...");
         const noticesRes = await axios.get('http://localhost:5000/api/admin/notices', config);
