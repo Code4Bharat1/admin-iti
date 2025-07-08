@@ -48,7 +48,7 @@ export default function ForgotPassword() {
       await axios.post('http://localhost:5000/api/admin/auth/reset-password', { email, otp, newPassword });
       setSuccess('Password reset successfully!');
       setTimeout(() => {
-        router.push('/adminlogin');
+        router.push('/login');
       }, 2000);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to reset password');
