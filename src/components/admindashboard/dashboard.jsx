@@ -56,7 +56,7 @@ export default function Dashboard() {
   ];
      
   
-  return (
+ return (
     <div className="flex min-h-screen font-poppins">
       {/* Dashboard Content */}
       <div className="bg-[#F4F8FC] flex-1 p-10">
