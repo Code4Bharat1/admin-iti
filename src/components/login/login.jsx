@@ -30,6 +30,10 @@ export default function Login() {
     }
   };
 
+  const handleForgotPassword=async()=>{
+    router.push('/adminforgot');
+  }
+
   return (
     <div className="flex min-h-screen">
       {/* Left Side */}
@@ -85,9 +89,9 @@ export default function Login() {
             {error && <p className="text-red-600 text-center">{error}</p>}
 
             <div className="text-right text-xl font-[Times_New_Roman] text-gray-900">
-              <a href="#" className="hover:underline">
+              <span onClick={handleForgotPassword} className="hover:underline">
                 Forgot Password?
-              </a>
+              </span>
             </div>
 
             <button

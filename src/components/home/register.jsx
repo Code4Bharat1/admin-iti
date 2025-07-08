@@ -138,42 +138,43 @@ export default function Register() {
             />
 
             {/* Name */}
-            <input
-              type="text"
-              name="name"
-              placeholder="Your name"
-              required
-              disabled={isSubmitting}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
-            />
+<input
+  type="text"
+  name="name"
+  placeholder="Your name"
+  required
+  disabled={isSubmitting}
+  className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-100 disabled:cursor-not-allowed placeholder:text-black"
+/>
 
-            {/* Phone */}
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Phone Number"
-              required
-              disabled={isSubmitting}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
-            />
+{/* Phone */}
+<input
+  type="tel"
+  name="phone"
+  placeholder="Phone Number"
+  required
+  disabled={isSubmitting}
+  className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-100 disabled:cursor-not-allowed placeholder:text-black"
+/>
 
-            {/* Course */}
-            <select
-              name="course"
-              required
-              disabled={isSubmitting}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
-            >
-              <option value="">Select Course</option>
-              <option value="Draughtsman Civil">Draughtsman Civil</option>
-              <option value="Draughtsman Mechanical">Draughtsman Mechanical</option>  
-              <option value="Copa">Computer Operator & Programming Assistant (COPA)</option>
-              <option value="marine filter">Marine Fitter</option>
-              <option value="ract">Refrigeration & Air Conditioning Technician (RACT)</option>
-              <option value="Mechanical Fitter">Mechanical Fitter</option>
-              <option value="Marine Electrician">Marine Electrician</option>  
-              <option value="Marine Welder">Marine Welder</option>
-            </select>
+{/* Course */}
+<select
+  name="course"
+  required
+  disabled={isSubmitting}
+  className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-100 disabled:cursor-not-allowed text-black"
+>
+  <option value="">Select Course</option>
+  <option value="Draughtsman Civil">Draughtsman Civil</option>
+  <option value="Draughtsman Mechanical">Draughtsman Mechanical</option>
+  <option value="Copa">Computer Operator & Programming Assistant (COPA)</option>
+  <option value="marine filter">Marine Fitter</option>
+  <option value="ract">Refrigeration & Air Conditioning Technician (RACT)</option>
+  <option value="Mechanical Fitter">Mechanical Fitter</option>
+  <option value="Marine Electrician">Marine Electrician</option>
+  <option value="Marine Welder">Marine Welder</option>
+</select>
+
 
             {/* Hidden field to customize email format */}
             <input

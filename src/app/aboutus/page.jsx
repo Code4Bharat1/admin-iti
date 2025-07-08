@@ -12,6 +12,7 @@ export default function page() {
       <AboutUsPage/>
       <OurManagement/>
       <ManagementCommittee/>
+      
      
      
    
