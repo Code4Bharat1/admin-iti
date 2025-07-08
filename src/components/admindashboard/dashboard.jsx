@@ -1,10 +1,13 @@
 "use client";
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import CountUp from 'react-countup';
 
 export default function Dashboard() {
   const [activities, setActivities] = useState([]);
   const [stats, setStats] = useState([]);
+  const speedFactor = 12;
+  const minDuration = 2;
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -18,12 +21,14 @@ export default function Dashboard() {
         const [blogsRes, imagesRes, noticesRes] = await Promise.all([
           axios.get('http://localhost:5000/api/admin/blogs', config),
           axios.get('http://localhost:5000/api/admin/media/images', config),
+          axios.get('http://localhost:5000/api/admin/media/videos', config),
           axios.get('http://localhost:5000/api/admin/notices', config),
         ]);
 
         const newStats = [
           { label: 'Notices', count: noticesRes.data.length },
           { label: 'Photos', count: imagesRes.data.length },
+          { label: 'Videos', count: imagesRes.data.length },
           { label: 'Blogs', count: blogsRes.data.length },
         ];
         setStats(newStats);
@@ -65,7 +70,13 @@ export default function Dashboard() {
               key={index}
               className="bg-[#FFDF35] text-center px-20 py-14 rounded-2xl shadow-lg w-[260px] h-[200px] flex flex-col justify-center items-center"
             >
-              <p className="text-7xl font-extrabold text-[#1F2C56]">{item.count}</p>
+              <p className="text-7xl font-extrabold text-[#1F2C56]">
+                <CountUp
+                  end={item.count}
+                  start={0}
+                  duration={Math.max(minDuration, item.count / speedFactor)}
+                />
+              </p>
               <p className="text-[#1F2C56] font-semibold mt-4 text-2xl">{item.label}</p>
             </div>
           ))}
