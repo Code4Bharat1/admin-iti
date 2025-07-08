@@ -23,7 +23,7 @@ export default function Login() {
       localStorage.setItem('token', token);
 
       // Redirect to dashboard or admin page
-      router.push('/');
+      router.push('/admindashboard');
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.message || 'Login failed');

@@ -52,68 +52,21 @@ export default function Navbar() {
   };
 
   const menuItems = [
-    { name: "Home", path: "/" },
-    { name: "About Us", path: "/aboutus" },
-    { name: "Courses", path: "/courses" },
-    { name: "Admissions", path: "/admission" },
-    { name: "Faculty", path: "/faculty" },
-    { name: "Student Corner", path: "/student_corner" },
-    { name: "Placement", path: "/placement" },
-    { name: "Contact Us", path: "/contactus" },
-    { name: "Gallery", path: "/gallery" },
+    { name: "Home", path: "http://localhost:3001/" },
+    { name: "About Us", path: "http://localhost:3001/aboutus" },
+    { name: "Courses", path: "http://localhost:3001/courses" },
+    { name: "Admissions", path: "http://localhost:3001/admission" },
+    { name: "Faculty", path: "http://localhost:3001/faculty" },
+    { name: "Student Corner", path: "http://localhost:3001/student_corner" },
+    { name: "Placement", path: "http://localhost:3001/placement" },
+    { name: "Contact Us", path: "http://localhost:3001/contactus" },
+    { name: "Gallery", path: "http://localhost:3001/gallery" },
   ];
 
   
 
   return (
-    <div className="w-full sticky top-0 z-50">
-      {/* Top bar with login/logout */}
-      
-        
-{/* Top Contact Info Bar */}
-<div className="bg-[#1c2848] text-white text-xs md:text-sm px-4 py-1 flex justify-between items-start">
-  {/* Left side: email and phone */}
-  <div className="flex items-start space-x-6">
-  {/* Email */}
-  <div className="flex items-start space-x-2 mt-1">
-    <span className="bg-yellow-400 text-white rounded-full w-5 h-5 flex items-center justify-center text-sm">
-      <MdEmail className="text-sm" />
-    </span>
-    <span className="text-white text-xs md:text-sm font-medium font-Poppins">awtmaft@gmail.com</span>
-  </div>
-
-  {/* Phone */}
-  <div className="flex items-start space-x-2 mt-1">
-    <span className="bg-yellow-400 text-white rounded-full w-5 h-5 flex items-center justify-center text-sm">
-      <MdPhone className="text-sm" />
-    </span>
-    <span className="text-white text-xs md:text-sm  font-medium font-Poppins">+91 8983508919</span>
-  </div>
-</div>
-
-
-  {/* Right side: login/logout */}
-  <div>
-    {!isLoggedIn ? (
-      <button
-        onClick={handleLogin}
-        className="bg-[#FFDF35] hover:bg-yellow-500 text-black px-2 py-1 rounded text-sm"
-      >
-        Log In
-      </button>
-    ) : (
-      <button
-        onClick={handleLogout}
-        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
-      >
-        Logout
-      </button>
-    )}
-  </div>
-</div>
-
-      <hr className="bg-white border border-white" />
-      
+    <div className="w-full sticky top-0 z-50"> 
       {/* Main navbar section */}
       <div className="bg-[#1c2848] w-full mobile-menu-container">
         <div className="w-[95%] mx-auto px-4 md:px-6 flex items-center justify-between py-2 md:py-1 max-w-[1600px]">
