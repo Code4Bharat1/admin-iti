@@ -56,25 +56,23 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchCounts = async () => {
       try {
-        const token = localStorage.getItem('token'); // ⬅️ get token
-
+        const token = localStorage.getItem('token');
         const config = {
-          headers: {
-            Authorization: `Bearer ${token}`, // ⬅️ add token to header
-          },
+          headers: { Authorization: `Bearer ${token}` },
         };
 
-        const [blogsRes, imagesRes, /* videosRes, */ noticesRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/admin/blogs', config),
-          axios.get('http://localhost:5000/api/admin/images', config),
-          // axios.get('http://localhost:5000/api/admin/videos', config), // ⛔️ failing
-          axios.get('http://localhost:5000/api/admin/notices', config),
-        ]);
+        console.log("Fetching blogs...");
+        const blogsRes = await axios.get('http://localhost:5000/api/admin/blogs', config);
+
+        console.log("Fetching images...");
+        const imagesRes = await axios.get('http://localhost:5000/api/admin/images', config);
+
+        console.log("Fetching notices...");
+        const noticesRes = await axios.get('http://localhost:5000/api/admin/notices', config);
 
         const newStats = [
           { label: 'Notices', count: noticesRes.data.length },
           { label: 'Photos', count: imagesRes.data.length },
-          { label: 'Videos', count: videosRes.data.length },
           { label: 'Blogs', count: blogsRes.data.length },
         ];
 
@@ -83,7 +81,6 @@ export default function Dashboard() {
         console.error('Error fetching counts:', error);
       }
     };
-
     fetchCounts();
   }, []);
 
@@ -98,7 +95,7 @@ export default function Dashboard() {
         <h1 className="text-4xl font-extrabold text-[#1F2C56] mb-12">Dashboard</h1>
 
         <div className="flex flex-wrap gap-8 mb-16 justify-center">
-          {newStats.map((item, index) => (
+          {stats.map((item, index) => (
             <div key={index} className="...">
               <p className="text-7xl font-extrabold text-[#1F2C56]">
                 <CountUp
