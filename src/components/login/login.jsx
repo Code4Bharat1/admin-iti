@@ -16,13 +16,10 @@ export default function Login() {
     setError('');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/admin/auth/login', { email, password }); // ✅ Ensure correct route
+      const res = await axios.post('http://localhost:5000/api/admin/auth/login', { email, password });
       const { token } = res.data;
 
-      // Store token locally (could be cookie instead)
       localStorage.setItem('token', token);
-
-      // Redirect to dashboard or admin page
       router.push('/admindashboard');
     } catch (err) {
       console.error(err);
@@ -30,27 +27,37 @@ export default function Login() {
     }
   };
 
-  const handleForgotPassword=async()=>{
+  const handleForgotPassword = async () => {
     router.push('/adminforgot');
-  }
+  };
 
   return (
     <div className="flex min-h-screen">
-      {/* Left Side */}
-      <div className="w-1/2 bg-[#1B264F] text-white flex flex-col items-center justify-center p-8">
+      {/* Left Side - Blue with Logo and Illustration */}
+      <div className="w-1/2 bg-[#1F2A44] text-white flex flex-col items-center justify-center p-8">
+        {/* Logo */}
+        <Image
+          src="/logo.png" 
+          alt="MAF ITI Logo"
+          width={300}
+          height={300}
+          className="mb-6"
+        />
+        {/* Illustration */}
         <Image
           src="/login.png"
           alt="Classroom"
-          width={500}
-          height={500}
+          width={600}
+          height={600}
           className="mb-6"
         />
+        {/* Info Text */}
         <p className="text-yellow-400 text-2xl font-semibold text-center">
           Please login to manage the website.
         </p>
       </div>
 
-      {/* Right Side */}
+      {/* Right Side - Login Form */}
       <div className="w-1/2 bg-white flex items-center justify-center">
         <div className="w-full max-w-lg px-6">
           <h2 className="text-5xl font-bold mb-10 font-[Times_New_Roman] text-black text-center">
@@ -68,7 +75,7 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="Email ID"
-                className="w-full px-4 py-3 bg-[#F4F9FF] rounded-lg shadow-md  text-black focus:outline-none"
+                className="w-full px-4 py-3 bg-[#F4F9FF] rounded-lg shadow-md text-black focus:outline-none"
               />
             </div>
 
@@ -89,7 +96,7 @@ export default function Login() {
             {error && <p className="text-red-600 text-center">{error}</p>}
 
             <div className="text-right text-xl font-[Times_New_Roman] text-gray-900">
-              <span onClick={handleForgotPassword} className="hover:underline">
+              <span onClick={handleForgotPassword} className="hover:underline cursor-pointer">
                 Forgot Password?
               </span>
             </div>

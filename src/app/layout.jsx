@@ -23,9 +23,10 @@ export default function RootLayout({ children }) {
   const showNavbarRoutes = ['/admindashboard', '/adminnotice'];
   const shouldShowNavbar = showNavbarRoutes.includes(pathname);
 
-  // Hide footer on all admin pages
+  // Hide footer on admin pages and login page
   const isAdminRoute = pathname.startsWith('/admin');
-  const shouldShowFooter = !isAdminRoute;
+  const isLoginPage = pathname === '/';
+  const shouldShowFooter = !isAdminRoute && !isLoginPage;
 
   return (
     <html lang="en">

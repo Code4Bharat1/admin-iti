@@ -68,7 +68,7 @@ export default function AdminSidebar() {
 
       localStorage.removeItem('token');
       setShowLogoutConfirm(false);
-      router.push('/login');
+      router.push('/');
     } catch (error) {
       console.error('Logout failed:', error);
       alert('Logout failed. Please try again.');
