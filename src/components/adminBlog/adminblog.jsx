@@ -60,20 +60,25 @@ export default function BlogPage() {
     e.preventDefault();
 
     try {
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('content', content);
+      formData.append('date', date);
+      if (selectedFile) formData.append('image', selectedFile);
+
       if (isEditing) {
         await axios.put(
           `http://localhost:5000/api/admin/blogs/${editBlogId}`,
-          { title, content, date, image: selectedFile },
-          { headers: { Authorization: `Bearer ${token}` } }
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         alert('Blog updated!');
       } else {
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('content', content);
-        formData.append('date', date);
-        if (selectedFile) formData.append('image', selectedFile);
-
         await axios.post('http://localhost:5000/api/admin/blogs', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -83,6 +88,7 @@ export default function BlogPage() {
         alert('Blog created!');
       }
 
+      // Reset form
       setTitle('');
       setContent('');
       setDate('');
@@ -96,7 +102,7 @@ export default function BlogPage() {
       });
       setBlogs(res.data);
     } catch (err) {
-      console.error(err);
+      console.error('Submit Error:', err.response?.data || err.message || err);
       alert('Failed to save blog');
     }
   };
@@ -182,7 +188,7 @@ export default function BlogPage() {
             <div key={blog._id} className="flex gap-6 items-start">
               <div className="w-60 h-36 relative flex-shrink-0">
                 {blog.image ? (
-                  <Image src={blog.image} alt="Blog Image" fill className="object-cover rounded-md" />
+                  <Image src={`http://localhost:5000${blog.image}`} alt="Blog Image" fill className="object-cover rounded-md" />
                 ) : (
                   <div className="w-60 h-36 bg-gray-300 flex items-center justify-center rounded-md text-gray-600 text-sm">
                     No Image
