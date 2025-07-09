@@ -21,7 +21,11 @@ export default function BlogPage() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
-    setToken(storedToken);
+    if (!storedToken) {
+      router.push('/login'); // or your actual login route
+    } else {
+      setToken(storedToken);
+    }
   }, []);
 
   useEffect(() => {
@@ -110,7 +114,13 @@ export default function BlogPage() {
   const handleEdit = (blog) => {
     setTitle(blog.title);
     setContent(blog.content);
-    setDate(new Date(blog.date).toISOString().split('T')[0]);
+    const parsedDate = new Date(blog.date);
+    if (!isNaN(parsedDate)) {
+      setDate(parsedDate.toISOString().split('T')[0]);
+    } else {
+      console.warn('Invalid date:', blog.date);
+      setDate('');
+    }
     setEditBlogId(blog._id);
     setIsEditing(true);
     setShowModal(true);
@@ -188,7 +198,12 @@ export default function BlogPage() {
             <div key={blog._id} className="flex gap-6 items-start">
               <div className="w-60 h-36 relative flex-shrink-0">
                 {blog.image ? (
-                  <Image src={`http://localhost:5000${blog.image}`} alt="Blog Image" fill className="object-cover rounded-md" />
+                  <Image
+                    src={blog.image.startsWith('http') ? blog.image : `http://localhost:5000${blog.image}`}
+                    alt="Blog Image"
+                    fill
+                    className="object-cover rounded-md"
+                  />
                 ) : (
                   <div className="w-60 h-36 bg-gray-300 flex items-center justify-center rounded-md text-gray-600 text-sm">
                     No Image
