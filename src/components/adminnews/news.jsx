@@ -8,7 +8,7 @@ export default function LatestNews() {
   const router = useRouter();
   const [token, setToken] = useState(null);
 
-  const [notice, setNotice] = useState("Enter your notice here");
+  const [news, setNews] = useState("Enter your news here");
   const [activities, setActivities] = useState([]);
   const [editingActivity, setEditingActivity] = useState(null);
 
@@ -24,7 +24,7 @@ export default function LatestNews() {
   }, []);
 
   useEffect(() => {
-    const fetchNotices = async () => {
+    const fetchNews = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/admin/news", {
           headers: {
@@ -33,24 +33,24 @@ export default function LatestNews() {
         });
         setActivities(res.data);
       } catch (err) {
-        console.error("Error fetching notices:", err.message);
+        console.error("Error fetching news:", err.message);
       }
     };
 
     if (token) {
-      fetchNotices();
+      fetchNews();
     }
   }, [token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!notice.trim()) return;
+    if (!news.trim()) return;
 
     try {
       const res = await axios.post(
         "http://localhost:5000/api/admin/news",
         {
-          description: notice,
+          description: news,
           date: new Date().toISOString(),
         },
         {
@@ -60,7 +60,7 @@ export default function LatestNews() {
         }
       );
       setActivities((prev) => [res.data, ...prev]);
-      setNotice("");
+      setNews(""); // clear the form
     } catch (err) {
       console.error("Failed to add news:", err.message);
     }
@@ -116,15 +116,15 @@ export default function LatestNews() {
       <div className="flex-1 bg-[#EDF4FF] p-10 relative">
         <h1 className="text-3xl font-bold text-[#1F2A44] mb-6">Latest News</h1>
 
-        {/* Add New Notice */}
+        {/* Add New News */}
         <div className="p-6 rounded-lg max-w-5xl mb-10">
           <form onSubmit={handleSubmit} className="space-y-4">
             <label className="block font-bold text-lg text-[#1F2C56]">
-              Add New News
+              Add News
             </label>
             <textarea
-              value={notice}
-              onChange={(e) => setNotice(e.target.value)}
+              value={news}
+              onChange={(e) => setNews(e.target.value)}
               rows={4}
               className="w-full p-4 rounded-md shadow-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#1F2C56] resize-none bg-white text-black"
             />
@@ -184,7 +184,7 @@ export default function LatestNews() {
         {editingActivity && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/30 backdrop-blur-sm">
             <div className="bg-white rounded-lg p-6 w-full max-w-xl">
-              <h2 className="text-2xl font-bold text-[#1F2C56] mb-6">Edit Notice</h2>
+              <h2 className="text-2xl font-bold text-[#1F2C56] mb-6">Edit News</h2>
 
               <div className="space-y-4">
                 <div>
@@ -192,8 +192,8 @@ export default function LatestNews() {
                   <input
                     type="text"
                     value={editingActivity.user}
-                    onChange={(e) => setEditingActivity({ ...editingActivity, user: e.target.value })}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1F2C56] text-black"
+                    disabled
+                    className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100 text-black"
                   />
                 </div>
 
