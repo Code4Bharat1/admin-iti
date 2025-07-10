@@ -114,7 +114,13 @@ export default function BlogPage() {
       });
       setBlogs(res.data);
     } catch (err) {
-      console.error('Submit Error:', err.response?.data || err.message || err);
+      console.error('Submit Error:', {
+        message: err.message,
+        response: err.response,
+        status: err.response?.status,
+        data: err.response?.data,
+        fullError: err
+      });
       alert('Failed to save blog');
     }
   };
@@ -207,7 +213,7 @@ export default function BlogPage() {
               <div className="w-60 h-36 relative flex-shrink-0">
                 {blog.image ? (
                   <Image
-                    src={blog.image.startsWith('http') ? blog.image : `http://localhost:5000${blog.image}`}
+                    src={blog.image}
                     alt="Blog Image"
                     fill
                     className="object-cover rounded-md"

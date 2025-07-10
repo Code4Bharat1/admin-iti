@@ -1,20 +1,7 @@
-/** @type {import('next').NextConfig} */
+// next.config.js
 const nextConfig = {
   images: {
-    domains: [
-      'www.shutterstock.com',
-      'images.app.goo.gl',
-      'localhost',
-      'imgs.search.brave.com', // ✅ Add this line
-    ],
-    remotePatterns: [
-      {
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '5000',
-        pathname: '/uploads/**',
-      },
-    ],
+    domains: ['res.cloudinary.com'],
   },
 };
 
