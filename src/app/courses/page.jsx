@@ -1,7 +1,7 @@
 
 import DubaiDry from '@/components/course/dubaidry'
 import OurTrade from '@/components/coursess/our_trade'
-import BlogSection from '@/components/home/blog'
+// //import BlogSection from '@/components/home/blog'
 import React from 'react'
 
 export default function page() {
@@ -9,7 +9,7 @@ export default function page() {
     <div>
       <OurTrade/>
       <DubaiDry/>
-      <BlogSection/>
+      {/* <BlogSection/> */}
             
     </div>
   )

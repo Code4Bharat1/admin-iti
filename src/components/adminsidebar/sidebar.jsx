@@ -129,6 +129,15 @@ export default function AdminSidebar() {
         </div>
 
         <div
+          onClick={() => router.push('/adminnews')}
+          className={`${baseLinkStyle} ${isActive('/adminnews') ? activeStyle : inactiveStyle
+            }`}
+        >
+          <FaClipboard className="text-lg" />
+          <span className="text-sm">News</span>
+        </div>
+
+        <div
           onClick={() => router.push('/adminBlog')}
           className={`${baseLinkStyle} ${isActive('/adminBlog') ? activeStyle : inactiveStyle
             }`}

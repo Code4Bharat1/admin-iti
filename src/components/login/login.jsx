@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
@@ -11,12 +11,23 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    // Disable scroll
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/admin/auth/login', { email, password });
+      const res = await axios.post('http://localhost:5000/api/admin/auth/login', {
+        email,
+        password,
+      });
       const { token } = res.data;
 
       localStorage.setItem('token', token);
@@ -27,30 +38,35 @@ export default function Login() {
     }
   };
 
-  const handleForgotPassword = async () => {
+  const handleForgotPassword = () => {
     router.push('/adminforgot');
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Left Side - Blue with Logo and Illustration */}
-      <div className="w-1/2 bg-[#1F2A44] text-white flex flex-col items-center justify-center p-8">
-        {/* Logo */}
-        <Image
-          src="/logo.png" 
-          alt="MAF ITI Logo"
-          width={300}
-          height={300}
-          className="mb-6"
-        />
-        {/* Illustration */}
-        <Image
-          src="/login.png"
-          alt="Classroom"
-          width={600}
-          height={600}
-          className="mb-6"
-        />
+    <div className="flex h-screen w-screen overflow-hidden">
+      {/* Left Side - Logo + Illustration + Info */}
+      <div className="w-1/2 bg-[#1F2A44] text-white flex flex-col items-center justify-center p-8 space-y-6">
+        {/* Larger Logo */}
+        <div className="relative w-[340px] h-[340px]">
+          <Image
+            src="/logo.png"
+            alt="MAF ITI Logo"
+            fill
+            className="object-contain"
+            priority
+          />
+        </div>
+
+        {/* Larger Illustration */}
+        <div className="relative w-[95%] max-w-[640px] h-[480px] lg:h-[560px]">
+          <Image
+            src="/login.png"
+            alt="Classroom Illustration"
+            fill
+            className="object-contain"
+          />
+        </div>
+
         {/* Info Text */}
         <p className="text-yellow-400 text-2xl font-semibold text-center">
           Please login to manage the website.
@@ -58,7 +74,7 @@ export default function Login() {
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="w-1/2 bg-white flex items-center justify-center">
+      <div className="w-1/2 bg-white flex items-center justify-center h-full">
         <div className="w-full max-w-lg px-6">
           <h2 className="text-5xl font-bold mb-10 font-[Times_New_Roman] text-black text-center">
             Welcome to MAF ITI
@@ -96,7 +112,10 @@ export default function Login() {
             {error && <p className="text-red-600 text-center">{error}</p>}
 
             <div className="text-right text-xl font-[Times_New_Roman] text-gray-900">
-              <span onClick={handleForgotPassword} className="hover:underline cursor-pointer">
+              <span
+                onClick={handleForgotPassword}
+                className="hover:underline cursor-pointer"
+              >
                 Forgot Password?
               </span>
             </div>
