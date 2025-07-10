@@ -68,7 +68,15 @@ export default function BlogPage() {
       formData.append('title', title);
       formData.append('content', content);
       formData.append('date', date);
-      if (selectedFile) formData.append('image', selectedFile);
+      if (selectedFile) {
+        formData.append('image', selectedFile);
+      } else if (isEditing) {
+        // Preserve previous image if not changing it
+        const blogToEdit = blogs.find(b => b._id === editBlogId);
+        if (blogToEdit?.image) {
+          formData.append('image', blogToEdit.image); // assuming backend handles this safely
+        }
+      }
 
       if (isEditing) {
         await axios.put(
