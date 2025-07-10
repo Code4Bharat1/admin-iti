@@ -1,8 +1,8 @@
 
 
 import HomeAboutUs from '@/components/home/aboutus'
-import BlogSection from '@/components/home/blog'
-import TopRecruitersSwap from '@/components/home/company'
+//import BlogSection from '@/components/home/blog'
+import TopRecruitersSwap from '//@/components/home/company'
 import Faculty from '@/components/home/faculty'
 import FAQPage from '@/components/home/faq'
 import Hero from '@/components/home/hero'

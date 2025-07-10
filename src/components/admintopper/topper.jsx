@@ -18,6 +18,8 @@ export default function TopperList() {
     trade: "",
     percentage: "",
   });
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const router = useRouter();
 
@@ -72,8 +74,8 @@ export default function TopperList() {
         }
       );
 
-      setStudents((prev) => [...prev, res.data]);
-      console.log("Student added successfully!");
+      // Add new student at the top
+      setStudents((prev) => [res.data, ...prev]);
       setShowModal(false);
     } catch (err) {
       console.error("Error adding student:", err);
@@ -96,18 +98,22 @@ export default function TopperList() {
       setStudents((prev) =>
         prev.map((s) => (s._id === editingStudent._id ? res.data : s))
       );
-      console.log("Student updated successfully!");
       setShowModal(false);
     } catch (err) {
       console.error("Error updating student:", err);
     }
   };
 
-  const handleDelete = async (id) => {
+  const confirmDelete = (id) => {
+    setDeleteId(id);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDelete = async () => {
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `http://localhost:5000/api/admin/toppers/deleteTopper/${id}`,
+        `http://localhost:5000/api/admin/toppers/deleteTopper/${deleteId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -115,11 +121,9 @@ export default function TopperList() {
         }
       );
 
-      setStudents((prev) =>
-        prev.filter((student) => student._id !== id)
-      );
-
-      console.log("Student deleted successfully!");
+      setStudents((prev) => prev.filter((student) => student._id !== deleteId));
+      setShowDeleteConfirm(false);
+      setDeleteId(null);
     } catch (err) {
       console.error("Error deleting student:", err);
     }
@@ -127,12 +131,11 @@ export default function TopperList() {
 
   return (
     <div className="bg-[#f3f8ff] p-6 min-h-screen font-[poppins] relative">
-
       <h2 className="text-4xl font-extrabold text-[#1F2A44] mb-6">
         Edit Topper List
       </h2>
 
-      {/* Year Selector + Add Column */}
+      {/* Year Selector + Add Button */}
       <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
         <div className="flex items-center gap-2 border border-gray-400 px-4 py-2 rounded bg-white text-base">
           <FaCalendarAlt className="text-gray-600" />
@@ -180,7 +183,7 @@ export default function TopperList() {
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(student._id)}
+                    onClick={() => confirmDelete(student._id)}
                     className="text-red-600 hover:underline"
                   >
                     Delete
@@ -192,7 +195,7 @@ export default function TopperList() {
         </table>
       </div>
 
-      {/* Modal (Add or Edit) */}
+      {/* Add/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg space-y-4 text-black">
@@ -240,6 +243,34 @@ export default function TopperList() {
                 className="bg-[#1B264F] text-white px-4 py-2 rounded hover:bg-[#162040]"
               >
                 {isEditing ? "Save" : "Add"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg max-w-sm w-full text-center shadow-xl">
+            <p className="text-lg font-semibold mb-4 text-black">
+              Are you sure you want to delete this topper?
+            </p>
+            <div className="flex justify-center gap-4 text-black">
+              <button
+                onClick={() => {
+                  setShowDeleteConfirm(false);
+                  setDeleteId(null);
+                }}
+                className="bg-black-300 px-4 py-2 rounded hover:bg-gray-400"
+              >
+                No
+              </button>
+              <button
+                onClick={handleDelete}
+                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+              >
+                Yes
               </button>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import TopRecruitersSwap from '@/components/home/company'
+// import TopRecruitersSwap from '//@/components/home/company'
 import PlacementSection from '@/components/placement/hero'
 import PlacementStats from '@/components/placement/placement'
 import PlacementLast from '@/components/placement/placementlast'
@@ -10,7 +10,7 @@ export default function page() {
     <div>
       <PlacementSection/>
       <PlacementStats/>
-      <TopRecruitersSwap/>
+      {/* <TopRecruitersSwap/> */}
       <PlacementProcess/>
       <PlacementLast/>
     </div>

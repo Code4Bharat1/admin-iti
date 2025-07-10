@@ -61,6 +61,7 @@ export default function Navbar() {
     { name: "Placement", path: "http://localhost:3001/placement" },
     { name: "Contact Us", path: "http://localhost:3001/contactus" },
     { name: "Gallery", path: "http://localhost:3001/gallery" },
+    { name: "News", path: "http://localhost:3001/news" },
   ];
 
   
