@@ -65,7 +65,7 @@ export default function VideoGallery() {
     if (selectedFile) {
       try {
         const formData = new FormData();
-        formData.append("video", selectedFile);
+        formData.append('video', selectedFile);
 
         const res = await axios.post(
           "http://localhost:5000/api/admin/media/videos",
