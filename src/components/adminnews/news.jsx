@@ -59,10 +59,22 @@ export default function LatestNews() {
           },
         }
       );
-      setActivities((prev) => [res.data, ...prev]);
+
+      // SAFEGUARD: If response doesn't have data in expected format, refetch everything
+      if (!res.data || !res.data._id) {
+        const refreshed = await axios.get("http://localhost:5000/api/admin/news", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setActivities(refreshed.data);
+      } else {
+        setActivities((prev) => [res.data, ...prev]);
+      }
+
       setNews(""); // clear the form
     } catch (err) {
-      console.error("Failed to add news:", err.message);
+      console.error("Failed to add news:", err.response?.data || err.message);
     }
   };
 
@@ -79,7 +91,7 @@ export default function LatestNews() {
         `http://localhost:5000/api/admin/news/${editingActivity._id}`,
         {
           description: editingActivity.description,
-          date: new Date(editingActivity.date).toISOString(),
+          date: editingActivity.date, // already formatted
         },
         {
           headers: {
