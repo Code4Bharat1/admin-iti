@@ -1,10 +1,16 @@
-'use client';
-
-import { usePathname } from 'next/navigation';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/navbar/navbar';
 import Footer from '@/components/footer/footer';
+
+export const metadata = {
+  title: 'MAF ITI - Admin',
+  description: 'Welcome to my application.',
+  icons: {
+    icon: '/favicon.ico',
+  },
+};
+
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -17,23 +23,13 @@ const geistMono = Geist_Mono({
 });
 
 export default function RootLayout({ children }) {
-  const pathname = usePathname();
-
-  // Show navbar only on specific admin pages
-  const showNavbarRoutes = ['/admindashboard', '/adminnotice'];
-  const shouldShowNavbar = showNavbarRoutes.includes(pathname);
-
-  // Hide footer on admin pages and login page
-  const isAdminRoute = pathname.startsWith('/admin');
-  const isLoginPage = pathname === '/';
-  const shouldShowFooter = !isAdminRoute && !isLoginPage;
 
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {shouldShowNavbar && <Navbar />}
+        <Navbar />
         {children}
-        {shouldShowFooter && <Footer />}
+        <Footer />
       </body>
     </html>
   );
