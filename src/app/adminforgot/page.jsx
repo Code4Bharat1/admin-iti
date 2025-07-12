@@ -19,7 +19,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     setError('');
     try {
-      await axios.post('http://localhost:5000/api/admin/auth/send-otp', { email });
+      await axios.post('https://iti-api.nexcorealliance.com/api/admin/auth/send-otp', { email });
       setStep(2);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to send OTP');
@@ -30,7 +30,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     setError('');
     try {
-      await axios.post('http://localhost:5000/api/admin/auth/verify-otp', { email, otp });
+      await axios.post('https://iti-api.nexcorealliance.com/api/admin/auth/verify-otp', { email, otp });
       setStep(3);
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid OTP');
@@ -45,7 +45,7 @@ export default function ForgotPassword() {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/admin/auth/reset-password', { email, otp, newPassword });
+      await axios.post('https://iti-api.nexcorealliance.com/api/admin/auth/reset-password', { email, otp, newPassword });
       setSuccess('Password reset successfully!');
       setTimeout(() => {
         router.push('/login');

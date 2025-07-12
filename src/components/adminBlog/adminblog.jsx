@@ -33,7 +33,7 @@ export default function BlogPage() {
 
     const fetchBlogs = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/admin/blogs', {
+        const response = await axios.get('https://iti-api.nexcorealliance.com/api/admin/blogs', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -50,7 +50,7 @@ export default function BlogPage() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/admin/blogs/${id}`, {
+      await axios.delete(`https://iti-api.nexcorealliance.com/api/admin/blogs/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBlogs((prev) => prev.filter((blog) => blog._id !== id));
@@ -80,7 +80,7 @@ export default function BlogPage() {
 
       if (isEditing) {
         await axios.put(
-          `http://localhost:5000/api/admin/blogs/${editBlogId}`,
+          `https://iti-api.nexcorealliance.com/api/admin/blogs/${editBlogId}`,
           formData,
           {
             headers: {
@@ -91,7 +91,7 @@ export default function BlogPage() {
         );
         alert('Blog updated!');
       } else {
-        await axios.post('http://localhost:5000/api/admin/blogs', formData, {
+        await axios.post('https://iti-api.nexcorealliance.com/api/admin/blogs', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`,
@@ -110,7 +110,7 @@ export default function BlogPage() {
       setEditBlogId(null);
       setShowModal(false);
 
-      const res = await axios.get('http://localhost:5000/api/admin/blogs', {
+      const res = await axios.get('https://iti-api.nexcorealliance.com/api/admin/blogs', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBlogs(res.data);

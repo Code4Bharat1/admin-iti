@@ -28,7 +28,7 @@ export default function TopperList() {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          "http://localhost:5000/api/admin/toppers/getTopper",
+          "https://iti-api.nexcorealliance.com/api/admin/toppers/getTopper",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -65,7 +65,7 @@ export default function TopperList() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "http://localhost:5000/api/admin/toppers/addTopper",
+        "https://iti-api.nexcorealliance.com/api/admin/toppers/addTopper",
         formData,
         {
           headers: {
@@ -86,7 +86,7 @@ export default function TopperList() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.put(
-        `http://localhost:5000/api/admin/toppers/updateTopper/${editingStudent._id}`,
+        `https://iti-api.nexcorealliance.com/api/admin/toppers/updateTopper/${editingStudent._id}`,
         formData,
         {
           headers: {
@@ -113,7 +113,7 @@ export default function TopperList() {
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `http://localhost:5000/api/admin/toppers/deleteTopper/${deleteId}`,
+        `https://iti-api.nexcorealliance.com/api/admin/toppers/deleteTopper/${deleteId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

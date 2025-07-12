@@ -52,16 +52,16 @@ export default function Navbar() {
   };
 
   const menuItems = [
-    { name: "Home", path: "http://localhost:3001/" },
-    { name: "About Us", path: "http://localhost:3001/aboutus" },
-    { name: "Courses", path: "http://localhost:3001/courses" },
-    { name: "Admissions", path: "http://localhost:3001/admission" },
-    { name: "Faculty", path: "http://localhost:3001/faculty" },
-    { name: "Student Corner", path: "http://localhost:3001/student_corner" },
-    { name: "Placement", path: "http://localhost:3001/placement" },
-    { name: "Contact Us", path: "http://localhost:3001/contactus" },
-    { name: "Gallery", path: "http://localhost:3001/gallery" },
-    { name: "News", path: "http://localhost:3001/news" },
+    { name: "Home", path: "https://maf-iti.nexcorealliance.com/" },
+    { name: "About Us", path: "https://maf-iti.nexcorealliance.com/aboutus" },
+    { name: "Courses", path: "https://maf-iti.nexcorealliance.com/courses" },
+    { name: "Admissions", path: "https://maf-iti.nexcorealliance.com/admission" },
+    { name: "Faculty", path: "https://maf-iti.nexcorealliance.com/faculty" },
+    { name: "Student Corner", path: "https://maf-iti.nexcorealliance.com/student_corner" },
+    { name: "Placement", path: "https://maf-iti.nexcorealliance.com/placement" },
+    { name: "Contact Us", path: "https://maf-iti.nexcorealliance.com/contactus" },
+    { name: "Gallery", path: "https://maf-iti.nexcorealliance.com/gallery" },
+    { name: "News", path: "https://maf-iti.nexcorealliance.com/news" },
   ];
 
   

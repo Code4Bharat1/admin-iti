@@ -24,7 +24,7 @@ export default function Login() {
     setError('');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/admin/auth/login', {
+      const res = await axios.post('https://iti-api.nexcorealliance.com/api/admin/auth/login', {
         email,
         password,
       });
