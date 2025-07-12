@@ -62,7 +62,7 @@ export default function LatestNews() {
 
       // SAFEGUARD: If response doesn't have data in expected format, refetch everything
       if (!res.data || !res.data._id) {
-        const refreshed = await axios.get("http://localhost:5000/api/admin/news", {
+        const refreshed = await axios.get("https://iti-api.nexcorealliance.com/api/admin/news", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
