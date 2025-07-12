@@ -36,7 +36,7 @@ export default function AdminSidebar() {
           headers: { Authorization: `Bearer ${token}` },
         };
 
-        const res = await axios.get('http://localhost:5000/api/admin/auth/me', config);
+        const res = await axios.get('https://iti-api.nexcorealliance.com/api/admin/auth/me', config);
         setAdmin(res.data.admin);
       } catch (error) {
         console.error('Failed to fetch admin details:', error);
@@ -64,7 +64,7 @@ export default function AdminSidebar() {
         headers: { Authorization: `Bearer ${token}` },
       };
 
-      await axios.post('http://localhost:5000/api/admin/auth/logout', {}, config);
+      await axios.post('https://iti-api.nexcorealliance.com/api/admin/auth/logout', {}, config);
 
       localStorage.removeItem('token');
       setShowLogoutConfirm(false);

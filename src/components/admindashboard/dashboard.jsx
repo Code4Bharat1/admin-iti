@@ -19,10 +19,10 @@ export default function Dashboard() {
 
         // Fetch counts
         const [blogsRes, imagesRes, noticesRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/admin/blogs', config),
-          axios.get('http://localhost:5000/api/admin/media/images', config),
-          axios.get('http://localhost:5000/api/admin/media/videos', config),
-          axios.get('http://localhost:5000/api/admin/notices', config),
+          axios.get('https://iti-api.nexcorealliance.com/api/admin/blogs', config),
+          axios.get('https://iti-api.nexcorealliance.com/api/admin/media/images', config),
+          axios.get('https://iti-api.nexcorealliance.com/api/admin/media/videos', config),
+          axios.get('https://iti-api.nexcorealliance.com/api/admin/notices', config),
         ]);
 
         const newStats = [
@@ -34,7 +34,7 @@ export default function Dashboard() {
         setStats(newStats);
 
         // Fetch recent activities
-        const activitiesRes = await axios.get('http://localhost:5000/api/admin/activities', config);
+        const activitiesRes = await axios.get('https://iti-api.nexcorealliance.com/api/admin/activities', config);
 
         // Format date before setting state (optional enhancement)
         const formattedActivities = activitiesRes.data.map((activity) => ({

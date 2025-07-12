@@ -26,7 +26,7 @@ export default function NoticeBoard() {
   useEffect(() => {
     const fetchNotices = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/admin/notices", {
+        const res = await axios.get("https://iti-api.nexcorealliance.com/api/admin/notices", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -48,7 +48,7 @@ export default function NoticeBoard() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/admin/notices",
+        "https://iti-api.nexcorealliance.com/api/admin/notices",
         {
           description: notice,
           date: new Date().toISOString(),
@@ -76,7 +76,7 @@ export default function NoticeBoard() {
   const handleSaveEdit = async () => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/admin/notices/${editingActivity._id}`,
+        `https://iti-api.nexcorealliance.com/api/admin/notices/${editingActivity._id}`,
         {
           description: editingActivity.description,
           date: new Date(editingActivity.date).toISOString(),
@@ -100,7 +100,7 @@ export default function NoticeBoard() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/admin/notices/${id}`, {
+      await axios.delete(`https://iti-api.nexcorealliance.com/api/admin/notices/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

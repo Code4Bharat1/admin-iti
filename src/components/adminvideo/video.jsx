@@ -22,7 +22,7 @@ export default function VideoGallery() {
     const fetchVideos = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/admin/media/videos",
+          "https://iti-api.nexcorealliance.com/api/admin/media/videos",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -49,7 +49,7 @@ export default function VideoGallery() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/admin/media/videos/${id}`, {
+      await axios.delete(`https://iti-api.nexcorealliance.com/api/admin/media/videos/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -68,7 +68,7 @@ export default function VideoGallery() {
         formData.append('video', selectedFile);
 
         const res = await axios.post(
-          "http://localhost:5000/api/admin/media/videos",
+          "https://iti-api.nexcorealliance.com/api/admin/media/videos",
           formData,
           {
             headers: {

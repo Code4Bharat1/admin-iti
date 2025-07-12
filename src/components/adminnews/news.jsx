@@ -26,7 +26,7 @@ export default function LatestNews() {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/admin/news", {
+        const res = await axios.get("https://iti-api.nexcorealliance.com/api/admin/news", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -48,7 +48,7 @@ export default function LatestNews() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/admin/news",
+        "https://iti-api.nexcorealliance.com/api/admin/news",
         {
           description: news,
           date: new Date().toISOString(),
@@ -76,7 +76,7 @@ export default function LatestNews() {
   const handleSaveEdit = async () => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/admin/news/${editingActivity._id}`,
+        `https://iti-api.nexcorealliance.com/api/admin/news/${editingActivity._id}`,
         {
           description: editingActivity.description,
           date: new Date(editingActivity.date).toISOString(),
@@ -100,7 +100,7 @@ export default function LatestNews() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/admin/news/${id}`, {
+      await axios.delete(`https://iti-api.nexcorealliance.com/api/admin/news/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

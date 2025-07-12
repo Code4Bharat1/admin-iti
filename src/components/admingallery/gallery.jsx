@@ -26,7 +26,7 @@ export default function Gallery() {
     const fetchPhotos = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get('http://localhost:5000/api/admin/media/images', {
+        const res = await axios.get('https://iti-api.nexcorealliance.com/api/admin/media/images', {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -43,7 +43,7 @@ export default function Gallery() {
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/admin/media/images/${id}`, {
+      await axios.delete(`https://iti-api.nexcorealliance.com/api/admin/media/images/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -75,7 +75,7 @@ export default function Gallery() {
         formData.append('image', selectedFile);
   
         const res = await axios.post(
-          'http://localhost:5000/api/admin/media/images',
+          'https://iti-api.nexcorealliance.com/api/admin/media/images',
           formData,
           {
             headers: {
